@@ -6,6 +6,20 @@ body {
 	background: url("../imgs/generic-background.jpg");
 }
 
+#topbar {
+	z-index:10;
+	width:100%;
+	background:black;
+	color:white;
+	height:20px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+a {
+	font-size:11px;
+	color:white;
+}
 .albumList {
 	margin:0;
 	display:inline;
@@ -16,6 +30,9 @@ img {
 	position:absolute;
 }
 
+#coverStack {
+	position:absolute;
+}
 #coverArt {
 	position:absolute;
 }

@@ -1,27 +1,31 @@
+/***************************************************** Declararations ***************************************/
+
 // Variables
 var feedUrl = 'http://localhost:8080/json';
+
 var buffer = [];
-var loadBuffer = 1000;
+var bufferLimit = 30;
 var initialSize = 300;
-var currentSize = initialSize;
+var l = 0;
+var totalColumns;
 
 // Swap Timer Variables
 var c = 0;
 var timer_is_on = 0;
 var t;
 
-// Resize Timer Variables
-var s = 0;
-var resize_is_on=0;
-var v;
 
+/***************************************************** Jquery Init Stuff ***************************************/
 
-// Initialize JQUERY
 $(document).ready(function(){
 	
 	$.getJSON(feedUrl, function(data) {
-	  $.each(data, function(key, val) {	
-		    buffer.push(val.path);			
+	  $.each(data, function(key, val) {
+		if(buffer.length >= bufferLimit) {	
+		    // stop adding
+		} else {
+			buffer.push(val.path);	
+		}
 	  });
 	
 	// preload images
@@ -29,48 +33,87 @@ $(document).ready(function(){
 		preload_image_object = new Image();
 		var i = 0;
 	
-		for(i=0; i<=loadBuffer; i++) 
+		for(i=0; i<=bufferLimit; i++) 
 	   		preload_image_object.src = buffer[i];
 		}
-		// display one
-		displayCover(buffer,0);
+		
+		displayCovers(buffer);
+		positionAsStack(initialSize);
+			
 	});
 	
-	positionCover(initialSize,currentSize);
-	//timedResize();
 });
 
+/***************************************************** Tweening Functions ***************************************/
+
+function switchToStack() {
+	positionAsStack(initialSize);
+	
+}
+
+function switchToTile() {
+	positionAsTile(initialSize, buffer)
+}
+
+/***************************************************** Position Functions ***************************************/
 
 // One cover Image Swaps
-function positionCover(initialSize,currentSize) {
+function positionAsStack(initialSize) {
+	$.each(buffer, function(i, l){
+	
+		$("#"+i).css("left","0");
+		$("#"+i).css("top","0");
+	});
 
-		var posX = getResolution()[0] / 2 - currentSize/2;
-		var posY = getResolution()[1] / 2 - currentSize/2;
-		$("#coverArt").css("left",posX);
-		$("#coverArt").css("top",posY);	
+	var posX = getResolution()[0] / 2 - initialSize/2;
+	var posY = getResolution()[1] / 2 - initialSize/2;
+	$("#coverStack").css("left",posX);
+	$("#coverStack").css("top",posY);	
 
 }
 
-function resizeCover(initialSize,scaleFactor) {
+function positionAsTile(initialSize,buffer) {
 	
-	currentSize = initialSize + scaleFactor / 10;
+	totalColumns = Math.floor(getResolution()[0]/initialSize);
 	
-	$("#coverArt").css("width",currentSize);
-	$("#coverArt").css("height",currentSize);
+	$("#coverStack").css("left","0");
+	$("#coverStack").css("top","0");
 	
-//	console.debug();
+	$.each(buffer, function(i, l){
+		
+	   row = Math.floor(i/totalColumns)	
+	   column = i % totalColumns;
+			
+	   tilePosX = initialSize * column;
+	   tilePosY = initialSize * row;
 	
-	positionCover(initialSize,currentSize);
-	
+		$("#"+i).css("left",tilePosX);
+		$("#"+i).css("top",tilePosY);
+	});
+
 }
 
-function displayCover(buffer,i) {
-	$("#coverArt").attr("src", buffer[i]);
+
+/***************************************************** Swap Functions **************************************/
+
+function displayCovers(buffer) {
+	$.each(buffer, function(i, l){
+	   $(document.createElement("img")).attr({ src: l }).addClass("stack").appendTo("#coverStack").css("width",initialSize).css("height",initialSize).css("z-index",'1').attr("id",i);
+	});
 }
 
-function swapCover(c) {
-	$("#coverArt").attr("src", buffer[c]);
+function changeIndex() {	
+	l = l+1;
+
+	$('#'+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
+	$('#'+ (bufferLimit - (l)) ).css({'z-index' : '1' });
+	
+	if( l == bufferLimit) {
+		l = 0;
+	}
 }
+
+/***************************************************** Additional as stack **************************************/
 
 // Handlers
 function handleOver(id) {
@@ -91,17 +134,8 @@ function handleOut(id) {
 function timedCount() {
 	c=c+1;
 	t = setTimeout("timedCount()",1000/30);
-	swapCover(c);
+	changeIndex();
 }
-
-// Resize Timmer
-function timedResize() {
-	s=s+1;
-	s = setTimeout("timedResize()",1000/10);
-	resizeCover(initialSize,s);
-	
-}
-
 
 // Helpers
 function getResolution() {

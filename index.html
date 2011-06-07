@@ -12,13 +12,20 @@
 	        
 	<script type="text/javascript" src="javascript/jquery-1.6.1.min.js"></script>
 	<script type="text/javascript" src="javascript/albums.js"></script>
+	<!--<script type="text/javascript" src="javascript/Tween.js"></script>!-->
 		
 	<!-- Date: 2011-06-06 -->
 </head>
 <body>
 
+<div id="topbar">
+	
+	<a href="javascript:void(0);" onclick="switchToTile()">Display as Tile</a>
+	<a href="javascript:void(0);" onclick="switchToStack()">Display as Stack</a>
+</div>
 
-<img id="coverArt"onMouseOver="handleOver(this)" onMouseOut="handleOut(this)">
+<div id="coverStack" onMouseOver="handleOver(this)" onMouseOut="handleOut(this)"></div>
+<!--<img id="coverArt" onMouseOver="handleOver(this)" onMouseOut="handleOut(this)">!-->
 
 </body>
 </html>
