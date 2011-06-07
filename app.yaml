@@ -1,0 +1,24 @@
+application: kaiserchiefsalbums
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /json
+  script: json.py
+
+- url: /css
+  static_dir: css
+  
+- url: /javascript
+  static_dir: javascript
+
+- url: /coverflow
+  static_dir: coverflow
+  
+- url: /imgs
+  static_dir: imgs  
+  
+- url: .*
+  script: main.py

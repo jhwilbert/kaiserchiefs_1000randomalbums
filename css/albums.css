@@ -1,0 +1,21 @@
+body {	
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial;
+    border: 0 none;
+	background: url("../imgs/generic-background.jpg");
+}
+
+.albumList {
+	margin:0;
+	display:inline;
+	padding:0;
+}
+img {
+	display:block;
+	position:absolute;
+}
+
+#coverArt {
+	position:absolute;
+}
