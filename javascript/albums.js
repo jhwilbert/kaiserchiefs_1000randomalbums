@@ -23,6 +23,7 @@ var timer_is_on = 0;
 // States
 var position = 0; // position 0=stack and 1=tile
 
+var currentRollover;
 
 
 /***************************************************** Jquery Init Stuff ***************************************/
@@ -47,16 +48,20 @@ $(document).ready(function(){
 	   		preload_image_object.src = buffer[i];
 		}
 		
-		displayCovers(buffer);
+		//displayCovers(buffer);
 		
+		var stack1=new coverStack(buffer,1,400,0);
+		var stack2=new coverStack(buffer,2,0,0);
+		//var stack1=new coverStack(buffer,"#coverStack2", 0,0);
 		
+		/*
 		if(position == 0) {
 			// stack
 			positionAsStack(initialSize);
 		} else {
 			positionAsTile(initialSize);
 		}
-		
+		*/
 		
 		
 			
@@ -73,16 +78,13 @@ function switchToStack() {
 
 function switchToTile() {
 	/*
-	t1 = new Tween(document.getElementById('14').style,'left',Tween.regularEaseOut,0,-1,2,'px');
-	t2 = new Tween(document.getElementById('14').style,'top',Tween.regularEaseOut,0,-1,2,'px');
+	t1 = new Tween(document.getElementById('14').style,'left',Tween.regularEaseOut,	,10,2,'px');
+	t2 = new Tween(document.getElementById('14').style,'top',Tween.regularEaseOut,0,10,2,'px');
 	t1.start();
 	t2.start();
 	*/
-	position = 1;
-	positionAsTile(initialSize, buffer)
+	//positionAsTile(initialSize, buffer)
 }
-
-
 
 
 /***************************************************** Position Functions ***************************************/
@@ -124,27 +126,69 @@ function positionAsTile(initialSize,buffer) {
 
 }
 
-function updatePosition() {
-	
-}
+
 
 //window.onresize = positionAsTile(); 
 
 /***************************************************** Swap Functions **************************************/
 
-function displayCovers(buffer) {
+
+/* creating object based on constructor  */
+
+function coverStack(imagestack,divindex,x,y) {
+
+	this.imagestack=imagestack;
+	this.divindex=divindex;
+	this.x = x;
+	this.y = y;
+	
+	$("#container").append('<div class="floatStack" id="coverStack'+divindex+'" onMouseOver="handleOver('+divindex+')" onMouseOut="handleOut('+divindex+')"></div>');
+	
+	$.each(imagestack, function(i, l){
+	   $(document.createElement("img")).attr({ src: l }).addClass("stack").appendTo("#coverStack"+divindex).css("width",initialSize).css("height",initialSize).css("z-index",'1').attr("id","coverStack"+divindex +"_"+i);
+	
+	});
+	
+	$("#coverStack"+divindex).css("left",x);
+	$("#coverStack"+divindex).css("top",y);
+
+}
+
+function changeIndex(divindex) {
+
+	
+	if(currentRollover != divindex) {
+		l = 0;
+	}
+
+	console.debug(divindex);
+	//console.debug("#coverStack"+divindex +"_"+ (bufferLimit - (l-1)));
+	l = l+1;
+
+	$("#coverStack"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
+	$("#coverStack"+divindex +"_"+ (bufferLimit - (l)) ).css({'z-index' : '1' });
+	
+	if( l == bufferLimit) {
+		l = 0;
+	}
+}
+
+
+
+/*
+
+function displayCovers(buffer,container) {
 	$("#coverStack").css("display", "none");
 	
 	$.each(buffer, function(i, l){
-	   $(document.createElement("img")).attr({ src: l }).addClass("stack").appendTo("#coverStack").css("width",initialSize).css("height",initialSize).css("z-index",'1').attr("id",i);
+	   $(document.createElement("img")).attr({ src: l }).addClass("stack").appendTo(container).css("width",initialSize).css("height",initialSize).css("z-index",'1').attr("id",i);
 		
 	});
 	
 	if(allImagesLoaded() == 1) {
-		console.debug("test");
-		$("#coverStack").css("display", "block");
+		$(containter).css("display", "block");
 		
-		$('#coverStack').fadeIn('slow', function() {
+		$(containter).fadeIn('slow', function() {
 	     // alert("Animation complete");
 	    });
 	
@@ -152,13 +196,13 @@ function displayCovers(buffer) {
 
 
 }
-
+*/
 function allImagesLoaded() {
 
 	// return variable
 	var imagesloaded = 1;
 
-	// All images are saved in an array called document.images. Very usefull
+	// All images are saved in an array called document.images. Very useful
 	var img = document.images;
 	// Loop through all the images
 	for (var i = 0;i<img.length;i++)
@@ -174,28 +218,18 @@ function allImagesLoaded() {
 }
 
 
-function changeIndex() {	
-	l = l+1;
-
-	$('#'+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
-	$('#'+ (bufferLimit - (l)) ).css({'z-index' : '1' });
-	
-	if( l == bufferLimit) {
-		l = 0;
-	}
-}
 
 /***************************************************** Additional as stack **************************************/
 
 // Handlers
-function handleOver(id) {
-	//console.debug("over");
-	timedCount();
+function handleOver(divindex) {
+	timedCount(divindex);
+	currentRollover = divindex;
 	timer_is_on=1;
 }
 
-function handleOut(id) {
-	//console.debug("out");
+function handleOut(divindex) {
+
 	if (timer_is_on == 1) {
 		clearInterval(t);
   		timer_is_on=0;
@@ -203,10 +237,10 @@ function handleOut(id) {
 }
 
 // Swap Timmer
-function timedCount() {
+function timedCount(divindex) {
 	c=c+1;
-	t = setTimeout("timedCount()",frameRate);
-	changeIndex();
+	t = setTimeout("timedCount("+divindex+")",frameRate);
+	changeIndex(divindex);
 }
 
 // Window Events
@@ -234,7 +268,6 @@ function getResolution() {
 	resolution[1] = viewportheight;
 	
 	// array - [0] width [1] height
-	console.debug()
 	
 	return resolution;
 
