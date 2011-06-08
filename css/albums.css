@@ -27,6 +27,7 @@ a {
 }
 img {
 	display:block;
+	border:1px solid white;
 	position:absolute;
 }
 
@@ -39,4 +40,17 @@ img {
 
 .floatStack {
 	position:absolute;
+}
+
+#container {
+	position:absolute;
+
+}
+
+#username {
+	width:1100px;
+	height:67px;
+	background:url("../imgs/generic-title-bg.png");
+	position:absolute;
+	bottom:100px;
 }
