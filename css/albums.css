@@ -17,8 +17,8 @@ body {
 	left:0;
 }
 a {
-	font-size:11px;
-	color:white;
+	font-size:12px;
+	color:black;
 }
 .albumList {
 	margin:0;
@@ -46,11 +46,15 @@ img {
 	position:absolute;
 
 }
-
-#username {
-	width:1100px;
-	height:67px;
-	background:url("../imgs/generic-title-bg.png");
+.username {
 	position:absolute;
-	bottom:100px;
+	background:#fbfbf9;
+	padding-top:20px;
+	text-align: left;
+	width:316px;
 }
+
+.stack {
+	position:absolute;
+}
+/*

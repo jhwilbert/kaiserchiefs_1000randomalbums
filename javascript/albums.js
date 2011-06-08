@@ -1,27 +1,31 @@
+
+
+
+
 /***************************************************** Declararations ***************************************/
 
 // Settings
 var feedUrl = 'http://localhost:8080/json'; // path to JSON service
 
-var bufferLimit = 40; // how many images are loaded from JSON
-var initialSize = 250; // size (w x h) of each cover
-var frameRate =  1000/10; // mouseover framerate
+var bufferLimit = 4; // how many images are loaded from JSON
+var initialSize = 316; // size (w x h) of each cover
+var frameRate =  1000; // mouseover framerate
 var rotationRate = 1000;
 
 // General Variables
 var l = 0;
 var buffer = [];
+var userbuffer = [];
 var	stacks = [];
 var totalColumns;
 var totalCovers;
 var randomnumber;
-var	totalColumns = 5;
-var tileTotal = 10;
+var	totalColumns;
+var tileTotal;
 
 var posX;
 var posY;
 
-var state = 0; // 0 - stack       1 - tile
 
 // Rotation Timer Variables
 var r;
@@ -45,7 +49,8 @@ $(document).ready(function(){
 		if(buffer.length >= bufferLimit) {	
 		    // stop adding
 		} else {
-			buffer.push(val.path);	
+			buffer.push(val.path);
+			userbuffer.push(val.username);	
 		}
 	  });
 	
@@ -63,46 +68,19 @@ $(document).ready(function(){
 	
 });
 
-/***************************************************** Username Functions ***************************************/
+
+
 
 
 /***************************************************** Tweening Functions ***************************************/
 
-function centralize(state) {
-	
-	if(state == 1) { // tile
-		totalRows = tileTotal / totalColumns;
-		// position stack
-		posX = getResolution()[0] / 2 - (totalColumns * initialSize)/2;
-		posY = getResolution()[1] / 2 - (totalRows * initialSize)/2;		
-	}
-	if(mode == 0 ) { // stack
-  		totalRows = tileTotal / totalColumns;
-		// position stack
-		posX = getResolution()[0] / 2 - initialSize/2;
-		posY = getResolution()[1] / 2 - initialSize/2;		
-	}
-
-	$("#container").css("left",posX);
-	$("#container").css("top",posY);
-	
-	usernameCenter = (getResolution()[0] / 2) - 550;
-	$("#username").css("left",usernameCenter);
-	//$("#username").css("top",900);
-	
+function getUsername(index) {
+	return userbuffer[index];
 }
 
-/***************************************************** Tweening Functions ***************************************/
+/*
 
-function switchToStack() {
-	// clean container
-	$("#container").html("");
-	var uniquestack=new coverStack(buffer,999,0,0);
-	mode = 0; // stack
-	centralize(mode);
-}
-
-function switchToTile() {
+function switchToTile(tileTotal,totalColumns) {
 	// clean container
 	$("#container").html("");
 	
@@ -119,45 +97,65 @@ function switchToTile() {
 	   tilePosX = initialSize * column;
 	   tilePosY = initialSize * row;
 	
-       stacks[i] = new coverStack(buffer,i,tilePosX,tilePosY);	
+       stacks[i] = new coverStack(userbuffer,buffer,i,tilePosX,tilePosY);	
 
 	}
 	totalCovers = stacks.length;
-	
-	mode = 1; // stack
-	centralize(mode);
-	
-	// start rotation
-	//timedRotation();
-	//rotation_is_on = 1;
+	centralize(tileTotal,totalColumns);
 	
 }
 
+*/
 
-
-
-
-/***************************************************** Position Functions ***************************************/
-
-// One cover Image Swaps
-function positionAsStack() {
-		var posX = getResolution()[0] / 2 - initialSize/2;
-		var posY = getResolution()[1] / 2 - initialSize/2;
+function switchToTile(tileTotal,totalColumns) {
+	// clean container
+	$("#container").html("");
+	
+	var widthCols = Math.floor(getResolution()[0]/initialSize);
+	var heightRows = Math.floor(getResolution()[1]/initialSize);
+	
+	//totalAllowed = widthCols + widthCols;
 		
-		position = [2];
-		position[0] = posX;
-		position[1] = posY;
-		
-		return position;
+	for (i=0; i< tileTotal; i++) 	{
+		   
+	   row = Math.floor(i/totalColumns);	
+	   column = i % totalColumns;
+
+	   tilePosX = initialSize * column;
+	   tilePosY = initialSize * row;
+	
+       stacks[i] = new coverStack(userbuffer,buffer,i,tilePosX,tilePosY);	
+
+	}
+	totalCovers = stacks.length;
+	centralize(tileTotal,totalColumns);
+	
+}
+/***************************************************** Tweening Functions ***************************************/
+
+function centralize(tileTotal,totalColumns) {
+	
+	totalRows = tileTotal / totalColumns;
+
+	posX = getResolution()[0] / 2 - (totalColumns * initialSize)/2;
+	posY = getResolution()[1] / 2 - (totalRows * initialSize)/2;		
+
+	$("#container").css("left",posX);
+	$("#container").css("top", posY);
+	
+	usernameCenter = (getResolution()[0] / 2) - 550;
+	$("#username").css("left",usernameCenter);
+	//$("#username").css("top",900);
+	
 }
 
 /***************************************************** Cover Stack Object **************************************/
 
+function
 
-/* creating object based on constructor  */
 
 
-function coverStack(imagestack,divindex,x,y) {
+function coverStack(userbuffer,imagestack,divindex,x,y) {
 	
 	this.imagestack=imagestack;
 	this.divindex=divindex;
@@ -166,7 +164,12 @@ function coverStack(imagestack,divindex,x,y) {
 	
 	
 	// create indexed stack div
-	$("#container").append('<div class="floatStack" id="coverStack'+divindex+'" onMouseOver="handleOver('+divindex+')" onMouseOut="handleOut('+divindex+')"></div>');
+	//$("#container").append('<div class="floatStack" id="coverStackContainer'+divindex+'"+""''</div>');
+
+	$("#container").append('<div class="floatStack" id="coverStackContainer'+divindex+'"></div>');
+		
+	$("#coverStackContainer"+divindex).append('<div class="floatStack" id="coverStack'+divindex+'" onMouseOver="handleOver('+divindex+')" onMouseOut="handleOut('+divindex+')"></div>');
+	$("#coverStackContainer"+divindex).append('<div class="floatStack" id="userStack'+divindex+'"></div>');
 	
 	// hide it during loading
 	$("#coverStack"+divindex).css("display", "none");
@@ -175,11 +178,22 @@ function coverStack(imagestack,divindex,x,y) {
 	$("#coverStack"+divindex).css("left",x);
 	$("#coverStack"+divindex).css("top",y);
 	
-	// append images
+	$("#userStack"+divindex).css("left",x);
+	$("#userStack"+divindex).css("top",y + initialSize);
+	
+	// append images	
 	$.each(imagestack, function(i, l){
-	   $(document.createElement("img")).attr({ src: l }).addClass("stack").appendTo("#coverStack"+divindex).css("width",initialSize).css("height",initialSize).css("z-index",'1').attr("id","coverStack"+divindex +"_"+i);
+	   $(document.createElement("div")).attr("id","cover"+divindex +"_"+i).appendTo("#coverStack"+divindex).css("z-index",'1').addClass("stack"); // subdiv of stack
+	   $(document.createElement("img")).attr({ src: l }).appendTo("#cover"+divindex +"_"+i).css("width",initialSize).css("height",initialSize); // add images to subdiv
+	
+	    $(document.createElement("div")).attr("id","user"+divindex +"_"+i).appendTo("#userStack"+divindex).attr("class","username").attr("display","none"); // user div subdiv of stack
+	
+	   $("#user"+divindex +"_"+i).html(userbuffer[i]+'<a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+'<br>www.kaiserchiefs.com/'+userbuffer[i]+'</a>');
+
+		
 	});
 	
+
 	// fade in if loaded
 	if(allImagesLoaded() == 1) {
 		$("#coverStack"+divindex).css("display", "block");
@@ -189,7 +203,32 @@ function coverStack(imagestack,divindex,x,y) {
 	}
 }
 
+function changeIndex(divindex) {
+	console.debug("change" + l);
+	
+	// check if rollover is in the same stack
+	if (currentRollover != divindex) {
+		l = 0;
+	} 
+	
+	l = l+1;
+	
+	
+	$("#cover"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
+	$("#cover"+divindex +"_"+ (bufferLimit - (l)) ).css({'z-index' : '1'  });
+	
+	
+	$("#user"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
+	$("#user"+divindex +"_"+ (bufferLimit - (l)) ).css({'z-index' : '1' });
+	
+	
+	if( l == bufferLimit) {
+		l = 0;
+	}
 
+
+	
+}
 
 function allImagesLoaded() {
 	var imagesloaded = 1;
@@ -209,24 +248,6 @@ function allImagesLoaded() {
 /***************************************************** Additional as stack **************************************/
 
 
-// Handlers
-function handleOver(divindex) {
-	timedCount(divindex,frameRate);
-	currentRollover = divindex;
-	timer_is_on=1;
-}
-
-function handleOut(divindex) {
-	if (timer_is_on == 1) {
-		clearInterval(t);
-  		timer_is_on=0;
-  	}
-}
-
-
-
-/***************************************************** Timmers  ***************************************/
-
 
 // Swap Timmer
 function timedCount(divindex) {
@@ -234,6 +255,32 @@ function timedCount(divindex) {
 	t = setTimeout("timedCount("+divindex+")",frameRate);
 	changeIndex(divindex);
 }
+
+function activateTimer(divindex) {
+	timedCount(divindex,frameRate);
+	currentRollover = divindex;
+	timer_is_on=1;
+}
+function handleOver(divindex) {
+	console.debug("over");
+	activateTimer(divindex)
+	
+
+}
+
+function handleOut(divindex) {
+	console.debug("out");
+	if (timer_is_on == 1) {
+		clearInterval(t);
+  		timer_is_on=0;
+  	}
+
+}
+
+
+
+/***************************************************** Timmers  ***************************************/
+
 
 
 // Rotation Timmer
@@ -246,39 +293,7 @@ function timedRotation() {
 
 
 
-function changeIndex(divindex) {
 
-	
-	// RANDOM ROTATION
-	if(rotation_is_on == 1) {
-		s = s + 1;
-		
-		console.debug("div index:"+"#coverStack"+divindex +"_"+ (bufferLimit - (s-1)) )
-		$("#coverStack"+divindex +"_"+ (bufferLimit - (s-1)) ).css({'z-index' : '0' });
-		//$("#coverStack"+divindex +"_"+ (bufferLimit - (s)) ).css({'z-index' : '1' });
-		if( s == bufferLimit) {
-			s = 0;
-		}
-	} 
-	
-	// MOUSEOVER ROTATION 
-	// check if rollover is in the same stack
-	if (currentRollover != divindex) {
-		l = 0;
-	} 
-	
-	l = l+1;
-
-	$("#coverStack"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
-	$("#coverStack"+divindex +"_"+ (bufferLimit - (l)) ).css({'z-index' : '1' });
-	
-	if( l == bufferLimit) {
-		l = 0;
-	}
-	
-
-	
-}
 
 
 /***************************************************** Window  ***************************************/
@@ -315,5 +330,6 @@ function getResolution() {
 
 
 window.onresize=function(){
-	centralize(mode);
+	centralize();
 }
+

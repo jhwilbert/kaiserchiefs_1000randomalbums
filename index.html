@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
 <head>
@@ -13,24 +12,27 @@
 	<script type="text/javascript" src="javascript/jquery-1.6.1.min.js"></script>
 	<script type="text/javascript" src="javascript/albums.js"></script>
 	<script type="text/javascript" src="javascript/Tween.js"></script>
+	
+
 		
 	<!-- Date: 2011-06-06 -->
 </head>
 <body>
 
-<div id="topbar">
-	
-	<a href="javascript:void(0);" onclick="switchToTile()">Display as Tile</a>
-	<a href="javascript:void(0);" onclick="switchToStack()">Display as Stack</a>
+
+<div id="topbara">	
+	<a href="javascript:void(0);" onclick="moveCovers()">Display 15</a>
+	<a href="javascript:void(0);" onclick="switchToTile(8,4)">Display 8</a>
+	<a href="javascript:void(0);" onclick="switchToTile(4,4)">Display 4</a>
+	<a href="javascript:void(0);" onclick="switchToTile(1,1)">Display 1</a>
 </div>
 
 <div id="container"></div>
-<div id="username"></div>
-<!--
-<div id="coverStack1" onMouseOver="handleOver(this)" onMouseOut="handleOut(this)"></div>
-<div id="coverStack2" onMouseOver="handleOver(this)" onMouseOut="handleOut(this)"></div>
-!-->
-<!--<img id="coverArt" onMouseOver="handleOver(this)" onMouseOut="handleOut(this)">!-->
+
+<div id="username">
+	<div id="namedisplay">test		
+	</div>
+</div>
 
 </body>
 </html>
