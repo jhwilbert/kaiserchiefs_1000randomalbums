@@ -1,5 +1,4 @@
 body {	
-    margin: 0px;
     padding: 0px;
     font-family: Arial;
     border: 0 none;
@@ -18,16 +17,31 @@ body {
 	left:0;
 }
 
+#content {
+	font-weight:normal;
+	color:#bebebe;
+	font-size:12px;
+	font-style:italic;
+}
 .backcontent {
-	font-weight:bold;
-	font-color:white;
+
 	text-align:center;
-	padding-top:20px;
+	padding-top:80px;
 }
 a {
-	font-size:12px;
-	color:black;
+	font-size:20px;
+
+	font-weight:bold;
+	color:#979797;
+	text-decoration: none;
 }
+a:hover {
+	font-size:20px;
+	font-weight:bold;
+	color:#5c5c5c;
+	text-decoration: none;
+}
+
 .albumList {
 	margin:0;
 	display:inline;
@@ -49,11 +63,46 @@ img {
 	position:absolute;
 }
 
-#container {
-position:relative;
-background:white;
-margin:50px;
+/* menu */
+.menu {
 
+	width:40px;
+	z-index: 15;
+	float:left;
+	background:#5d5d5d;
+	margin:5px;
+	padding:5px;
+	text-align:center;
+}
+
+#menu1 {
+	position:absolute;
+	top:10px;
+	left:10px;
+}
+
+#menu2 {
+	top:10px;
+	left:70px;
+	position:absolute;
+		
+}
+
+
+.menu a{
+
+	color:#f1f2ed;
+	font-size:11px;
+}
+
+
+#container {
+	position:relative;
+	height:5000px;
+	width:5000px;
+	z-index: 5;
+	margin:0px;
+	margin:10px;
 }
 .username {
 
@@ -63,7 +112,6 @@ margin:50px;
 	color:white;
 	display:none;
 	text-align: left;
-
 	opacity:0.4;
 	filter:alpha(opacity=0);
 }

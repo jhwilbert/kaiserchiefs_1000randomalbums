@@ -1,18 +1,20 @@
 /***************************************************** Settings ***************************************/
 
 var feedUrl = 'http://localhost:8080/json'; // path to JSON service
-var bufferLimit = 24; // how many images are loaded from JSON
+var bufferLimit = 30; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
+var gridSize = 200;
 var frameRate =  1000/30; // shuffle framerate
 var rotationRate = 10000; // rotation framerate
-var gap = 50; // gap between images
+var gap = 70; // gap between images
+var bleed = 8; // set to 0 for window limit, set it to number of desired columns 
 
 /***************************************************** Declararations ***************************************/
 
 // Cover Arrays
-var buffer = [];
-var userbuffer = [];
-var	stacks = [];
+buffer = [];
+userbuffer = [];
+stacks = [];
 covers = [];
 
 // General Variables
@@ -39,12 +41,13 @@ var timer_is_on = 0;
 
 $(document).ready(function(){	
 	$.getJSON(feedUrl, function(data) {
+		
 	  $.each(data, function(key, val) {
 		if(buffer.length >= bufferLimit) {	
-		    // stop adding
+		    //stop adding
 		} else {
 			buffer.push(val.path);
-			userbuffer.push(val.username);	
+			userbuffer.push(val.username);
 		}
 	  });
 	
@@ -56,7 +59,9 @@ $(document).ready(function(){
 		for(i=0; i<=bufferLimit; i++) 
 	   		preload_image_object.src = buffer[i];
 		}
-		singleStack1 = new coverStack(userbuffer,buffer,0); // takes user names, image paths and stack index - starting at 0
+		
+		// takes user names, image paths and stack index - starting at 0
+		singleStack1 = new coverStack(userbuffer,buffer,0);
 
 		timedRotation();
 	});	
@@ -70,8 +75,7 @@ var sequence;
 function mySideChange(front) {
     if (front) {
         $(this).parent().find('div.front').show();
-        $(this).parent().find('div.back').hide();
-        
+        $(this).parent().find('div.back').hide();        
     } else {
         $(this).parent().find('div.front').hide();
         $(this).parent().find('div.back').show();
@@ -84,37 +88,42 @@ function switchView(position) {
 	parallel = new Parallel();
 	sequence = new Sequence();
 	
-	totalColumns = 	Math.floor(stageSize()[0]/initialSize) - 2;
-	
-	for (i=0; i< bufferLimit; i++) 	{
+	// Define number of columns
+	if(bleed == 0) {
+		totalColumns = 	Math.floor(stageSize()[0]/gridSize) - 2;	
+	} else {
+		totalColumns = bleed;
+	}
 		
-		if(position==1) {
-			
+	// Create Grid
+	for (i=0; i< bufferLimit; i++) 	{	
+		if(position==1) {	
+					
 			// tile elements
 			row = Math.floor(i/totalColumns);	
 			column = i % totalColumns;
 
-			tilePosX = ((initialSize + gap) * column);
-			tilePosY = ((initialSize + gap) * row);
+			tilePosX = ((gridSize + gap) * column);
+			tilePosY = ((gridSize + gap) * row);
+			
+			//covers[i].resize(i,gridSize)
 			covers[i].tweenToPosition(i,tilePosX,tilePosY);
-			
-			// start drag
-			//Drag.init(document.getElementById("container"));
-			
-			//$("#container").css("cursor","pointer");
+
+			Drag.init(document.getElementById("container"));
+			$("#container").css("cursor","pointer");				
 
 			$("#cover"+divindex +"_"+i).hover(				
 			        function () {
-			            $(this).find('div').stop().rotate3Di('flip', 250, {direction: 'clockwise', sideChange: mySideChange});
+			            $(this).find('div').stop().rotate3Di('flip', 200, {direction: 'clockwise', sideChange: mySideChange});
 			        },
 			        function () {
-			            $(this).find('div').stop().rotate3Di('unflip', 500, {sideChange: mySideChange});
+			            $(this).find('div').stop().rotate3Di('unflip', 200, {sideChange: mySideChange});
 			        }
-			    );
+			 );
 			
 		} else {
+			//covers[i].resize(i,initialSize)
 			covers[i].tweenToPosition(i,stageCenter()[0],stageCenter()[1]);
-
 		}
 	}
 	parallel.start();
@@ -142,19 +151,20 @@ function coverSingle(divindex,i,l) {
 	   $(document.createElement("div")).attr("id","coverfront"+divindex +"_"+i).appendTo("#cover"+divindex +"_"+i).addClass("front"); //  creates 3 "#coverfront0_0" front
 	   $(document.createElement("div")).attr("id","coverback"+divindex +"_"+i).appendTo("#cover"+divindex +"_"+i).addClass("back"); // creates 4 "#coverback0_0"	
 	
-	   $(document.createElement("img")).attr({ src: l }).appendTo("#coverfront"+divindex +"_"+i).css("width",initialSize).css("height",initialSize); // create image element for front
+	   $(document.createElement("img")).attr({ src: l }).attr("id","img"+divindex +"_"+i).appendTo("#coverfront"+divindex +"_"+i).css("width",initialSize).css("height",initialSize); // create image element for front
 	   $("#coverback"+divindex +"_"+i).html("test back");
 	
 	   $("#coverback"+divindex +"_"+i).css("width", initialSize);
        $("#coverback"+divindex +"_"+i).css("height", initialSize);
 		
-	   $("#coverback"+divindex +"_"+i).html('<div class="backcontent"><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
+	   $("#coverback"+divindex +"_"+i).html('<div class="backcontent"><div id="content">Created By:</div><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
 
 
 	  if (typeof(_coverSingle_prototype_called) == 'undefined')	  {
 	     _coverSingle_prototype_called = true;
 	     coverSingle.prototype.updatePosition = updatePosition;
 		 coverSingle.prototype.tweenToPosition = tweenToPosition;
+	     coverSingle.prototype.resize = resize;
 	  }
 	
 	// singleCover methods
@@ -162,13 +172,9 @@ function coverSingle(divindex,i,l) {
 		$("#cover"+divindex +"_"+i).css("top",y);
 		$("#cover"+divindex +"_"+i).css("left",x);
 		//console.debug("initialyx="+x,"initialy="+y)
-	 }
-	
-
-	
+	 }	
      function tweenToPosition(i,endx,endy) {
-		var p = $("#cover"+divindex +"_"+i);
-				
+		var p = $("#cover"+divindex +"_"+i);				
 		var position = p.position();
 		currx = position.left;
 		curry = position.top;
@@ -179,12 +185,19 @@ function coverSingle(divindex,i,l) {
 				
 		//sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'left',Tween.regularEaseOut,currx,endx,0.1,'px'));
 		//sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'top',Tween.regularEaseOut,curry,endy,0.1,'px'));
-
-	 }
-
+	 }	
 	
+	function resize(i,gridSize){
+		
+		//$("#img"+divindex +"_"+i).hide("scale", { percent:50}, 1000);
+		
+		//$("#img"+divindex +"_"+i).css("width",gridSize);
+		//$("#img"+divindex +"_"+i).css("height",gridSize);
+		//$("#coverback"+divindex +"_"+i).css("width", gridSize);
+        //$("#coverback"+divindex +"_"+i).css("height", gridSize);
+		
+	}
 }
-
 
 
 // coverStack object
@@ -196,30 +209,10 @@ function coverStack(userbuffer,buffer,divindex) {
 	// append image and create stcack
 	$.each(buffer, function(i, l){
 		  covers[i] = new coverSingle(divindex,i,l);
-		  covers[i].updatePosition(divindex,i,stageCenter()[0],stageCenter()[1]);		
+		  covers[i].updatePosition(divindex,i,stageCenter()[0],stageCenter()[1]);
 	});
-
-	// fade in if loaded
-	if(allImagesLoaded() == 1) {
-		$(".floatStack").fadeIn('slow', function() {
-	     // alert("Animation complete");
-	    });
-	}
 }
 
-
-function allImagesLoaded() {
-	var imagesloaded = 1;
-	var img = document.images;
-
-	for (var i = 0;i<img.length;i++) {
-		// If the image isnt loaded we set the return varible to 0
-		if(img[i].complete == false) {
-			imagesloaded = 0;
-		}
-	}
-	return imagesloaded;
-}
 
 
 
@@ -310,3 +303,11 @@ window.onresize=function(){
 }
 
 */
+
+
+function dragStart(ev) {
+   ev.dataTransfer.effectAllowed='move';
+   ev.dataTransfer.setData("Text", ev.target.getAttribute('id'));
+   ev.dataTransfer.setDragImage(ev.target,0,0);
+   return true;
+}
