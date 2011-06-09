@@ -10,29 +10,30 @@
     <link type="text/css" rel="stylesheet" media="screen" href="css/albums.css" />
 	        
 	<script type="text/javascript" src="javascript/jquery-1.6.1.min.js"></script>
-	<script type="text/javascript" src="javascript/albums.js"></script>
-	<script type="text/javascript" src="javascript/Tween.js"></script>
 	
+	<script type="text/javascript" src="javascript/albums.js"></script>
+	
+	<script type="text/javascript" src="javascript/Tween.js"></script>
+	<script type="text/javascript" src="javascript/Parallel.js"></script>	
+	<script type="text/javascript" src="javascript/Sequence.js"></script>	
+	<script type="text/javascript" src="javascript/dom-drag.js"></script>	
 
-		
+	<script type="text/javascript" src="javascript/rotate3Di.js"></script>
+	<script type="text/javascript" src="javascript/jquery-css-transform.js"></script>			
+
 	<!-- Date: 2011-06-06 -->
 </head>
 <body>
 
 
-<div id="topbara">	
-	<a href="javascript:void(0);" onclick="moveCovers()">Display 15</a>
-	<a href="javascript:void(0);" onclick="switchToTile(8,4)">Display 8</a>
-	<a href="javascript:void(0);" onclick="switchToTile(4,4)">Display 4</a>
-	<a href="javascript:void(0);" onclick="switchToTile(1,1)">Display 1</a>
+<div id="topbara">
+	<a href="javascript:void(0);" onclick="switchView(0)">STACK</a>
+	<a href="javascript:void(0);" onclick="switchView(1)">GRID</a>
 </div>
+
 
 <div id="container"></div>
 
-<div id="username">
-	<div id="namedisplay">test		
-	</div>
-</div>
 
 </body>
 </html>

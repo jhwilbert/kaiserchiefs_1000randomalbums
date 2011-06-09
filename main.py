@@ -87,7 +87,7 @@ class scrape(webapp.RequestHandler):
             if len(images) == 0:
                 self.response.out.write('All done (or there was an error)<br>')
             else:               
-                self.response.out.write("scraping user #:" + counter.counter)
+                self.response.out.write(counter.counter)
                 src = str(images[0])
                 imageArray = src.split(" ")
                

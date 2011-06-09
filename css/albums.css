@@ -4,6 +4,7 @@ body {
     font-family: Arial;
     border: 0 none;
 	background: url("../imgs/generic-background.jpg");
+	overflow:hidden;
 }
 
 #topbar {
@@ -16,6 +17,13 @@ body {
 	top:0;
 	left:0;
 }
+
+.backcontent {
+	font-weight:bold;
+	font-color:white;
+	text-align:center;
+	padding-top:20px;
+}
 a {
 	font-size:12px;
 	color:black;
@@ -27,7 +35,6 @@ a {
 }
 img {
 	display:block;
-	border:1px solid white;
 	position:absolute;
 }
 
@@ -43,18 +50,30 @@ img {
 }
 
 #container {
-	position:absolute;
+position:relative;
+background:white;
+margin:50px;
 
 }
 .username {
+
 	position:absolute;
-	background:#fbfbf9;
-	padding-top:20px;
+	background:black;
+	padding-top:10px;
+	color:white;
+	display:none;
 	text-align: left;
-	width:316px;
+
+	opacity:0.4;
+	filter:alpha(opacity=0);
 }
 
-.stack {
-	position:absolute;
+.front {
+	
+}
+.back {
+	width:216px;
+	height:216px;
+	background:#dddddd;
 }
 /*
