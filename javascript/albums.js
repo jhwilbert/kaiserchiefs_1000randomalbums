@@ -1,32 +1,27 @@
-/***************************************************** Declararations ***************************************/
+/***************************************************** Settings ***************************************/
 
-// Settings
 var feedUrl = 'http://localhost:8080/json'; // path to JSON service
-
 var bufferLimit = 24; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
-var frameRate =  1000/30; // mouseover framerate
-var rotationRate = 10000;
-var gap = 50;
-// General Variables
-var l = 0;
+var frameRate =  1000/30; // shuffle framerate
+var rotationRate = 10000; // rotation framerate
+var gap = 50; // gap between images
+
+/***************************************************** Declararations ***************************************/
+
+// Cover Arrays
 var buffer = [];
 var userbuffer = [];
 var	stacks = [];
+covers = [];
 
-var tweenLeft = [];
-var tweenTop = [];
-
-
+// General Variables
+var posX;
+var posY;
+var l = 0;
 var totalColumns;
 var totalCovers;
 var tileTotal;
-
-// Cover Arrays
-covers = [];
-
-var posX;
-var posY;
 
 // Rotation Timer Variables
 var r;
@@ -42,8 +37,7 @@ var timer_is_on = 0;
 
 /***************************************************** Jquery Init Stuff ***************************************/
 
-$(document).ready(function(){
-	
+$(document).ready(function(){	
 	$.getJSON(feedUrl, function(data) {
 	  $.each(data, function(key, val) {
 		if(buffer.length >= bufferLimit) {	
@@ -65,10 +59,7 @@ $(document).ready(function(){
 		singleStack1 = new coverStack(userbuffer,buffer,0); // takes user names, image paths and stack index - starting at 0
 
 		timedRotation();
-	});
-
-
-	
+	});	
 });
 
 
@@ -98,8 +89,6 @@ function switchView(position) {
 	for (i=0; i< bufferLimit; i++) 	{
 		
 		if(position==1) {
-			
-			
 			
 			// tile elements
 			row = Math.floor(i/totalColumns);	
@@ -136,10 +125,6 @@ function switchView(position) {
 
 
 /***************************************************** Cover Stack Object **************************************/
-
-
-
-
 
 // singleCover object
 function coverSingle(divindex,i,l) {
@@ -207,22 +192,15 @@ function coverStack(userbuffer,buffer,divindex) {
 	
 	// create indexed stack div
 	$("#container").append('<div class="floatStack" id="coverStack'+divindex+'"></div>');
-	//$("#coverStackContainer"+divindex).append('<div class="floatStack" id="userStack'+divindex+'"></div>');	
-	//$("#coverStackContainer"+divindex).append('<div class="floatStack" id="coverStack'+divindex+'" onMouseOver="handleOver('+divindex+')" onMouseOut="handleOut('+divindex+')"></div>');
-	
-	// hide it during loading
-	//$("#coverStack"+divindex).css("display", "none");
-			
+
 	// append image and create stcack
 	$.each(buffer, function(i, l){
 		  covers[i] = new coverSingle(divindex,i,l);
-		  covers[i].updatePosition(divindex,i,stageCenter()[0],stageCenter()[1]);
-		
+		  covers[i].updatePosition(divindex,i,stageCenter()[0],stageCenter()[1]);		
 	});
 
 	// fade in if loaded
 	if(allImagesLoaded() == 1) {
-		//$("#coverStack"+divindex).css("display", "block");
 		$(".floatStack").fadeIn('slow', function() {
 	     // alert("Animation complete");
 	    });
@@ -245,27 +223,22 @@ function allImagesLoaded() {
 
 
 
-/***************************************************** Timmers  ***************************************/
+/***************************************************** Timmed Events  ***************************************/
 
-function changeIndex() {	
-	
-	l = l+1;
-	
+function changeIndex() {		
+	l = l+1;	
 	divindex = 0;
 	
 	$("#cover"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'z-index' : '0' });
 	$("#cover"+divindex +"_"+ (bufferLimit - (l)) ).css({'z-index' : '1'  });
 	
-	
 	$("#user"+divindex +"_"+ (bufferLimit - (l-1)) ).css({'display' : 'none' });
 	$("#user"+divindex +"_"+ (bufferLimit - (l)) ).css({'display' : 'block' });
-	
-	
+		
 	if( l == bufferLimit) {
 		var randomnumber=Math.floor(Math.random()*bufferLimit);
 		l = randomnumber;
 	}
-	
 }
 
 
@@ -286,15 +259,6 @@ function timedCount() {
 		changeIndex();
 	}	
 }
-
-
-
-function handleOver() {
-}
-
-function handleOut() {
-}
-
 
 
 /***************************************************** Window  ***************************************/
