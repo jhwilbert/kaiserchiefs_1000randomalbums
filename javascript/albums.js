@@ -7,7 +7,7 @@ var gridSize = 200;
 var frameRate =  1000/30; // shuffle framerate
 var rotationRate = 10000; // rotation framerate
 var gap = 70; // gap between images
-var bleed = 8; // set to 0 for window limit, set it to number of desired columns 
+var bleed = 0; // set to 0 for window limit, set it to number of desired columns 
 
 /***************************************************** Declararations ***************************************/
 
@@ -34,8 +34,6 @@ var rotation_is_on = 0;
 var t;
 var c = 0;
 var timer_is_on = 0;
-
-
 
 /***************************************************** Jquery Init Stuff ***************************************/
 
@@ -90,7 +88,7 @@ function switchView(position) {
 	
 	// Define number of columns
 	if(bleed == 0) {
-		totalColumns = 	Math.floor(stageSize()[0]/gridSize) - 2;	
+		totalColumns = 	Math.floor(stageSize()[0]/gridSize) - 1;	
 	} else {
 		totalColumns = bleed;
 	}
@@ -103,8 +101,8 @@ function switchView(position) {
 			row = Math.floor(i/totalColumns);	
 			column = i % totalColumns;
 
-			tilePosX = ((gridSize + gap) * column);
-			tilePosY = ((gridSize + gap) * row);
+			tilePosX = (gridSize + gap) * column;
+			tilePosY = (gridSize + gap) * row;
 			
 			//covers[i].resize(i,gridSize)
 			covers[i].tweenToPosition(i,tilePosX,tilePosY);
@@ -122,15 +120,17 @@ function switchView(position) {
 			 );
 			
 		} else {
+			
+			$("#container").css("cursor","default");
+			$("#cover"+divindex +"_"+i).unbind('mouseenter').unbind('mouseleave')
 			//covers[i].resize(i,initialSize)
 			covers[i].tweenToPosition(i,stageCenter()[0],stageCenter()[1]);
 		}
 	}
-	parallel.start();
-	//sequence.start()
+	//parallel.start();
+	sequence.start()
 
 }
-
 
 
 /***************************************************** Cover Stack Object **************************************/
@@ -173,6 +173,7 @@ function coverSingle(divindex,i,l) {
 		$("#cover"+divindex +"_"+i).css("left",x);
 		//console.debug("initialyx="+x,"initialy="+y)
 	 }	
+	
      function tweenToPosition(i,endx,endy) {
 		var p = $("#cover"+divindex +"_"+i);				
 		var position = p.position();
@@ -180,11 +181,11 @@ function coverSingle(divindex,i,l) {
 		curry = position.top;
 					
 		//console.debug("cover"+divindex +"_"+i,"starty"+curry,"startx" +currx)
-		parallel.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'left',Tween.regularEaseOut,currx,endx,2,'px'));
-		parallel.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'top',Tween.regularEaseOut,curry,endy,2,'px'));
+		//parallel.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'left',Tween.regularEaseOut,currx,endx,2,'px'));
+	//	parallel.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'top',Tween.regularEaseOut,curry,endy,2,'px'));
 				
-		//sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'left',Tween.regularEaseOut,currx,endx,0.1,'px'));
-		//sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'top',Tween.regularEaseOut,curry,endy,0.1,'px'));
+		sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'left',Tween.regularEaseOut,currx,endx,0.1,'px'));
+		sequence.addChild(new Tween(document.getElementById("cover"+divindex +"_"+i).style,'top',Tween.regularEaseOut,curry,endy,0.1,'px'));
 	 }	
 	
 	function resize(i,gridSize){
