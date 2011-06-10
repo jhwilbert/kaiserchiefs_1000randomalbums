@@ -97,12 +97,12 @@ img {
 
 
 #container {
+	
 	position:relative;
-	height:5000px;
-	width:5000px;
 	z-index: 5;
 	margin:0px;
 	margin:10px;
+	border:1px solid black;
 }
 .username {
 
