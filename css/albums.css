@@ -6,64 +6,49 @@ body {
 	overflow:hidden;
 }
 
-#topbar {
-	z-index:10;
-	width:100%;
-	background:black;
-	color:white;
-	height:20px;
-	position:absolute;
-	top:0;
-	left:0;
-}
+/* Single Cover */
 
-#content {
-	font-weight:normal;
-	color:#bebebe;
-	font-size:12px;
-	font-style:italic;
-}
 .backcontent {
-
 	text-align:center;
-	padding-top:80px;
-}
-a {
-	font-size:20px;
+	color:#8d8d8d;
+	font-style:italic;
+	padding-top:20px;
 
+}
+.cover {
+	position:absolute;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration: none;
+
+}
+.cover a:hover {
+	font-size:20px;
+	font-weight:bold;
+	color:#595959;
+	font-style:normal;
+	text-decoration: none;
+}
+.cover a {
+	font-size:20px;
 	font-weight:bold;
 	color:#979797;
-	text-decoration: none;
-}
-a:hover {
-	font-size:20px;
-	font-weight:bold;
-	color:#5c5c5c;
-	text-decoration: none;
+	font-style:normal;
+	text-decoration: none;	
 }
 
-.albumList {
-	margin:0;
-	display:inline;
-	padding:0;
+.back {
+	background:#dddddd;
 }
+
 img {
-	display:block;
 	position:absolute;
 }
 
-#coverStack {
-	position:absolute;
-}
-#coverArt {
-	position:absolute;
-}
 
-.floatStack {
-	position:absolute;
-}
 
 /* menu */
+
 .menu {
 
 	width:40px;
@@ -88,7 +73,6 @@ img {
 		
 }
 
-
 .menu a{
 
 	color:#f1f2ed;
@@ -97,12 +81,11 @@ img {
 
 
 #container {
-	
 	position:relative;
 	z-index: 5;
 	margin:0px;
 	margin:10px;
-	border:1px solid black;
+	/*border:1px solid black;*/
 }
 .username {
 
@@ -119,9 +102,5 @@ img {
 .front {
 	
 }
-.back {
-	width:216px;
-	height:216px;
-	background:#dddddd;
-}
-/*
+
+
