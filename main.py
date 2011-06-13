@@ -102,7 +102,7 @@ class scrape(webapp.RequestHandler):
             
                 #count = +=1
                 if username not in coverjson:
-                    coverjson[counter.counter] = {"path":  fullpath, "username":  username }
+                    coverjson[counter.counter] = {"path":  fullpath, "username":  username, "highlight":  0 }
              
                 counter.json = simplejson.dumps(coverjson)
                 counter.counter+=1

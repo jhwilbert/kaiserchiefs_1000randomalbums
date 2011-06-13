@@ -1,8 +1,8 @@
 /***************************************************** Settings ***************************************/
 
-var feedUrl = 'http://localhost:8080/json'; // path to JSON service
-var bufferLimit = 1000; // how many images are loaded from JSON
-var initialSize = 250; // size (w x h) of each cover
+var feedUrl = 'http://localhost:8181/json'; // path to JSON service
+var bufferLimit = 50; // how many images are loaded from JSON
+var initialSize = 115; // size (w x h) of each cover
 var gap = 50; // gap between images
 
 /***************************************************** Declararations ***************************************/
@@ -11,7 +11,8 @@ var gap = 50; // gap between images
 buffer = [];
 userbuffer = [];
 covers = [];
-
+highlightbuffer = [];
+hidden = [];
 // General Variables
 var posX;
 var posY;
@@ -43,6 +44,7 @@ $(document).ready(function(){
 		} else {
 			buffer.push(val.path);
 			userbuffer.push(val.username);
+			highlightbuffer.push(val.highlight);
 		}
 	  });
 	
@@ -61,6 +63,11 @@ $(document).ready(function(){
 
 /***************************************************** Grid Object **************************************/
 
+var lookupGrid = [];
+
+
+
+
 function grid(userbuffer,buffer) {
 	
 	
@@ -70,23 +77,122 @@ function grid(userbuffer,buffer) {
     	 grid.prototype.zoom = zoom;
     	 grid.prototype.calculateUp = calculateUp;
          grid.prototype.calculateDown = calculateDown;
+		 grid.prototype.initLookup = initLookup;
+		 grid.prototype.lookup = lookup;
 	  }
 	
+	function initLookup(){
+		var cols = rows = Math.floor(totalColumns);
+		for(var i =0; i < cols; i++){
+			lookupGrid[i] = [];
+			for(var j=0; j < rows;j++){
+				lookupGrid[i][j] = 0;
+			}
+		}
+	}
+	
+	function lookup(row,col,size){
+		if(size==1){
+			if(lookupGrid[row][col] == 0){
+				lookupGrid[row][col] = size;
+				return true;
+			} else {
+				return false;
+			}
+		} else{
+			for(var i = 0; i < size;i++)
+				for(var j = 0; j < size;j++)
+					if(lookupGrid[row + i][col + j] == 0)
+						return false;
+					
+			for(var i = 0; i < size;i++)
+				for(var j = 0; j < size;j++)
+					lookupGrid[row + i][col + j] = size;
+			return true;
+		}
+	}
+	
+	
 	function generate(userbuffer,buffer) {
+	
+	
 		$.each(buffer, function(i, l){
-
-			// instantiate covers
-			covers[i] = new coverSingle(i,l);
 			
+			covers[i] = new coverSingle(i,l);
+
 			// tile elements
 			row = Math.floor(i/totalColumns);	
 			column = i % totalColumns;
-			tilePosX = (initialSize + gap) * column;
-			tilePosY = (initialSize + gap) * row;
-			covers[i].updatePosition(i,tilePosX,tilePosY);
+			
+			//covers[i].resize(i,(highlightbuffer[i]==1) ? initialSize * 2.2 : initialSize);
+			/*
+			if(lookup(row,column,(highlightbuffer[i] == 1) ? 2 : 1)){
+				tilePosX = (initialSize + gap) * column;
+				tilePosY = (initialSize + gap) * row;
+				found = true;
+				console.log('found',tilePosX,tilePosY);
+				//break;
+				covers[i].updatePosition(i,tilePosX,tilePosY);
+			}
+			*/						
+			
+			var found = false;
+			for(var r = 0; r < 50; r++){
+				//for(var c = 0; c < row; c++){
+					 var randRow =  Math.floor(Math.random() * (totalColumns - 1));
+					 var randCol=  Math.floor(Math.random() * (totalColumns - 1));
+					//var randRow = r;
+					//var randCol = c;
+				
+					if(lookup(randRow,randCol,(highlightbuffer[i] == 1) ? 2 : 1)){
+						tilePosX = randRow * (initialSize + gap);
+						tilePosY = randCol * (initialSize + gap);
+						found = true;
+						covers[i].resize(i,(highlightbuffer[i]==1) ? initialSize * 2 + gap : initialSize);
+						console.log('found',tilePosX,tilePosY);
+						break;
+					}
+				//}
+			}
+			//*/
+			if(found) covers[i].updatePosition(i,tilePosX,tilePosY);		
+			
+			
+			//tilePosX = (initialSize + gap) * column;
+			//tilePosY = (initialSize + gap) * row;				
+			//covers[i].updatePosition(i,tilePosX,tilePosY);			
+
+			// // if it comes accross a highlighted
+			// 			if(highlightbuffer[i] == 1) {	
+			// 				
+			// 				
+			// 				// first checks if its not in the border
+			// 				if(column == (totalColumns-1)) {
+			// 					console.debug("id" + i + "is in a last column and can't be resized");
+			// 				} else {					
+			// 					console.debug(i + " is resized and is in" + column + "column and " + row + "row");
+			// 					console.debug(next1,next2,next3 + "have to be hidden");
+			// 					console.debug(next1,next2,next3 + "have to be hidden");
+			// 					
+			// 					// hidden
+			// 					var next1 = i+1;
+			// 					var next2 = totalColumns+i;
+			// 					var next3 = next2+1;
+			// 					
+			// 					// unresizable
+			// 					var previous1 = i-1;
+			// 					
+			// 					hidden.push(next1,next2,next3);
+			// 				}			
+			// }
+			// instantiate covers
+
 		});
+		
+		hide(hidden);
 	}	
 	
+
 	function calculateUp(number){
 		return Math.round((number + 0.1)*100)/100;
 	}
@@ -124,7 +230,7 @@ function grid(userbuffer,buffer) {
 			// tile elements	
 			row = Math.floor(i/totalColumns);	
 			column = i % totalColumns;
-			
+
 			tilePosX = (initialSize + finalGap - (initialSize - finalValue) ) * column;
 			tilePosY = (initialSize + finalGap - (initialSize - finalValue)) * row;
 			
@@ -157,8 +263,8 @@ function container() {
 	containerSize = totalColumns*(initialSize + gap);
 	containerCenter = containerSize/2;
 	
-	$("#container").css("left", 0-(containerCenter/2));
-	$("#container").css("top", 0-(containerCenter/2));
+	// $("#container").css("left", 0-(containerCenter/2));
+	// $("#container").css("top", 0-(containerCenter/2));
 	
 	var theRoot = document.getElementById("container");
 	Drag.init(theRoot, null);
@@ -170,11 +276,19 @@ function container() {
 	//console.debug("fit in window height"+Math.round(stageSize()[1]/(initialSize+gap)));
 	
 	grid = new grid(userbuffer,buffer,0);
+	grid.initLookup();
 	grid.generate(userbuffer,buffer,0);
 }
 
 
 /***************************************************** Cover Stack Object **************************************/
+
+function hide(selected) {
+	$.each(selected, function(index, value) {
+		//console.debug(value);
+	  	$("#cover_"+value).css("display", "none");
+	});
+}
 
 function zoomgrid(direction) {
 	grid.zoom(direction)
@@ -187,16 +301,17 @@ function coverSingle(i,l) {
 	   $(document.createElement("div")).attr("id","coverback_"+i).appendTo("#cover_"+i).addClass("back"); 													 // creates 4 "#coverback0_0"	back
 	   $(document.createElement("img")).attr({ src: l }).attr("id","img_"+i).appendTo("#coverfront_"+i).css("width",initialSize).css("height",initialSize);  // image element
 	   
+		
 	   $("#coverback_"+i).css("width", initialSize);
        $("#coverback_"+i).css("height", initialSize);
 
-	   $("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
-
+	   $("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+highlightbuffer[i]+'</a></div>');
+/*
 	   $("#cover_"+i).hover(function () {
 	   		$(this).find('div').stop().rotate3Di('flip', 200, {direction: 'clockwise', sideChange: mySideChange}); },function () {
        		$(this).find('div').stop().rotate3Di('unflip', 200, {sideChange: mySideChange});
 	   });
-		
+*/		
 
 	  if (typeof(_coverSingle_prototype_called) == 'undefined')	  {
 	     _coverSingle_prototype_called = true;
@@ -225,14 +340,25 @@ function coverSingle(i,l) {
 		parallel.addChild(new Tween(document.getElementById("cover_"+i).style,'top',Tween.regularEaseOut,curry,endy,0.4,'px'));				
 	 }	
 	*/
-	function resize(i,initialSize){
-		
-		$("#img_"+i).css("width",initialSize);
-		$("#img_"+i).css("height",initialSize);
-		$("#coverfront"+i).css("width",initialSize);
-		$("#coverfront"+i).css("height",initialSize);
-		$("#coverback_"+i).css("width",initialSize);
-		$("#coverback_"+i).css("height",initialSize);
+	
+
+	
+	function resize(i,initialSize){	
+		// if(highlightbuffer[i] == 1) {
+		// 	$("#img_"+i).css("width",initialSize * 2.2);
+		// 	$("#img_"+i).css("height",initialSize * 2.2);
+		// 	$("#coverfront"+i).css("width",initialSize * 2.2);
+		// 	$("#coverfront"+i).css("height",initialSize * 2.2);
+		// 	$("#coverback_"+i).css("width",initialSize * 2.2);
+		// 	$("#coverback_"+i).css("height",initialSize * 2.2);
+		// } else {
+			$("#img_"+i).css("width",initialSize);
+			$("#img_"+i).css("height",initialSize);
+			$("#coverfront"+i).css("width",initialSize);
+			$("#coverfront"+i).css("height",initialSize);
+			$("#coverback_"+i).css("width",initialSize);
+			$("#coverback_"+i).css("height",initialSize);			
+		// }
 	}
 }
 
