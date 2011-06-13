@@ -1,7 +1,7 @@
 /***************************************************** Settings ***************************************/
 
 var feedUrl = 'http://localhost:8080/json'; // path to JSON service
-var bufferLimit = 200; // how many images are loaded from JSON
+var bufferLimit = 1000; // how many images are loaded from JSON
 var initialSize = 250; // size (w x h) of each cover
 var gap = 50; // gap between images
 
@@ -21,6 +21,9 @@ var direction;
 var zoomCover = 1;
 var zoomgap = 1;
 var finalGap;
+
+var minZoom = 0.3;
+var maxZoom = 1.0;
 
 var fontSize = 12;
 var linkSize = 20;
@@ -65,6 +68,8 @@ function grid(userbuffer,buffer) {
 	     _gridprototype_called = true;
 	     grid.prototype.generate = generate;
     	 grid.prototype.zoom = zoom;
+    	 grid.prototype.calculateUp = calculateUp;
+         grid.prototype.calculateDown = calculateDown;
 	  }
 	
 	function generate(userbuffer,buffer) {
@@ -82,17 +87,34 @@ function grid(userbuffer,buffer) {
 		});
 	}	
 	
+	function calculateUp(number){
+		return Math.round((number + 0.1)*100)/100;
+	}
+	function calculateDown(number){
+		return Math.round((number - 0.1)*100)/100;
+	}
+	
 	function zoom(direction) {
 		if(direction == 0) {
-			zoomCover = zoomCover - 0.1;
-			zoomgap = zoomgap - 0.1;
-			updatedLinkSize = updatedLinkSize - 2;
-			updatedFontSize = updatedFontSize - 1;	
+			// limit minZoom
+			if(zoomCover == minZoom) {
+				zoomCover = minZoom;
+			} else {
+				zoomCover = calculateDown(zoomCover);
+				zoomgap = calculateDown(zoomgap);
+				updatedLinkSize = updatedLinkSize - 2;
+				updatedFontSize = updatedFontSize - 1;				
+			}
 		} else {
-			zoomCover = zoomCover + 0.1;
-			zoomgap = zoomgap + 0.1;
-			updatedLinkSize = updatedLinkSize + 2;
-			updatedFontSize = updatedFontSize + 1;
+			// limit maxZoom		
+			if(zoomCover == maxZoom) {
+				zoomCover = maxZoom;
+			} else {
+				zoomCover = calculateUp(zoomCover);
+				zoomgap = calculateUp(zoomgap);
+				updatedLinkSize = updatedLinkSize + 2;
+				updatedFontSize = updatedFontSize + 1;
+			}
 		}
 		
 		finalGap = gap * zoomgap;

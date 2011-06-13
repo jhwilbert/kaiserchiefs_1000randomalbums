@@ -92,8 +92,12 @@ class scrape(webapp.RequestHandler):
                 imageArray = src.split(" ")
                
                 imagepath = imageArray[1].lstrip('src="')[0:-1] # image path
-             
-                fullpath = 'http://www.kaiserchiefs.com'+ imagepath
+                #imagepath = imageArray[1].lstrip('src="')[0:-1].lstrip('/service/ResizeImage/316/316/') # image path
+
+                customservicepath = "/service/ResizeImage/250/250/"
+
+                fullpath = 'http://www.kaiserchiefs.com' + imagepath
+                
                 username = imageArray[2].lstrip('alt="')[0:-2] # username
             
                 #count = +=1
@@ -103,7 +107,7 @@ class scrape(webapp.RequestHandler):
                 counter.json = simplejson.dumps(coverjson)
                 counter.counter+=1
                 counter.put()
-            
+                #self.response.out.write(fullpath)
                 self.response.out.write('<script>document.location="/scrape"</script>')
           
 def main():
