@@ -1,9 +1,9 @@
 /***************************************************** Settings ***************************************/
 
 var feedUrl = 'http://localhost:8181/json'; // path to JSON service
-var bufferLimit = 500; // how many images are loaded from JSON
-var initialSize = 215; // size (w x h) of each cover
-var gap = 50; // gap between images
+var bufferLimit = 20; // how many images are loaded from JSON
+var initialSize = 100; // size (w x h) of each cover
+var gap = 1; // gap between images
 
 /***************************************************** Declararations ***************************************/
 
@@ -12,6 +12,12 @@ buffer = [];
 userbuffer = [];
 covers = [];
 highlightbuffer = [];
+
+blackListRow = [];
+blackListCol = [];
+
+whiteListRow = [];
+whiteListCol = [];
 
 
 // General Variables
@@ -24,13 +30,16 @@ var zoomCover = 1;
 var zoomgap = 1;
 var finalGap;
 
-var minZoom = 0.3;
+var minZoom = 0.1;
 var maxZoom = 1.0;
 
 var fontSize = 12;
 var linkSize = 20;
 var updatedLinkSize = linkSize;
 var updatedFontSize = fontSize;
+
+var row;
+var column;
 //var parallel;  
 //var sequence;
 
@@ -63,9 +72,11 @@ $(document).ready(function(){
 });
 
 /***************************************************** Grid Object **************************************/
-
+var randRow;
+var randCol;
+		var temp = 0;
 var lookupGrid = [];
-
+smallcovers = [];
 function grid(userbuffer,buffer) {
 	
 	
@@ -75,83 +86,131 @@ function grid(userbuffer,buffer) {
     	 grid.prototype.zoom = zoom;
     	 grid.prototype.calculateUp = calculateUp;
          grid.prototype.calculateDown = calculateDown;
-		 grid.prototype.initLookup = initLookup;
-		 grid.prototype.lookup = lookup;
+		 grid.prototype.checkArray = checkArray;
+		 grid.prototype.createLookup = createLookup;
+		 grid.prototype.populate = populate;
 	}
 
-	function initLookup(){
-		var cols = rows = Math.floor(totalColumns);
-		for(var i =0; i < cols; i++){
-			lookupGrid[i] = [];
-			for(var j=0; j < rows;j++){
-				lookupGrid[i][j] = 0;
+
+
+	function checkArray(row,column) {		
+	 	//console.debug("checking", row, column);
+		if ( blackListRow.length > 0 ) {
+			for(var i=0; i < blackListRow.length; i++) {
+				//console.debug("against", blackListRow[i], blackListCol[i]);
+				if(blackListRow[i] == row && blackListCol[i] == column ) {
+					//console.debug("its not ok");
+					return true;
+				}
+				//console.debug("it's ok");
+				if (i == (blackListRow.length -1) ) return false;
 			}
+		} else {
+			//console.debug("nothing to check against");
+			return false;
 		}
 	}
-
-	function lookup(row,col,size){
-		if(size==1){
-			if(lookupGrid[row][col] == 0){
-				lookupGrid[row][col] = size;
-				return true;
-			} else {
-				return false;
-			}
-		} else{
-			for(var i = 0; i < size;i++)
-				for(var j = 0; j < size;j++)
-					if(lookupGrid[row + i][col + j] == 0)
-						return false;
-
-			for(var i = 0; i < size;i++)
-				for(var j = 0; j < size;j++)
-					lookupGrid[row + i][col + j] = size;
-			return true;
-		}
-	}
-	
+		
 	function generate(userbuffer,buffer) {
-		$.each(buffer, function(i, l){
 
+		$.each(buffer, function(i, l){
+		if( i == buffer.length -1) {
+			//console.debug();
+			createLookup();
+		} else { 
+			if(highlightbuffer[i] == 1) {
+				covers[i] = new coverSingle(i,l);
+									
+				//console.debug("existingBlacklistRows"+blackListRow);
+				//console.debug("existingBlacklistCols"+blackListCol);
+
+				randRow =  Math.floor(Math.random() * (totalColumns - 1));
+				randCol=  Math.floor(Math.random() * (totalColumns - 1));
+
+				//console.debug("randCol"+randRow);
+				//console.debug("randCol"+randCol);																
+
+				while (checkArray(randRow,randCol) == true || checkArray(randRow,randCol+1) == true || checkArray(randRow+1,randCol) == true || checkArray(randRow+1,randCol+1) == true) {
+
+				randRow =  Math.floor(Math.random() * (totalColumns - 1));
+				randCol =  Math.floor(Math.random() * (totalColumns - 1));
+				//console.debug("iterating",s, "randomCol", randCol, "randomRow",randRow);							
+				} 
+				
+				// position them and blacklist
+				tilePosX = randCol * (initialSize + gap);
+				tilePosY = randRow * (initialSize + gap);
+								
+				blackListRow.push(randRow,randRow,randRow+1,randRow+1);
+				blackListCol.push(randCol,randCol+1,randCol,randCol+1);	
+				
+				covers[i].updatePosition(i,tilePosX,tilePosY);
+				covers[i].resize(i,initialSize * 2);
+				
+				//console.debug("newBlacklistRows"+blackListRow);
+				//console.debug("newBlacklistCols"+blackListCol); 						
+			}
+
+		}	
+
+		});
+	}
+	function createLookup() {
+		console.debug("blacklistedCols"+blackListCol);
+		console.debug("blacklistedRows"+blackListRow);
+		
+		// FOR EACH ALBUM IN THE BUFFER
+		$.each(buffer, function(i, l){
 			
-			// instantiate covers
-			covers[i] = new coverSingle(i,l);
-			
-			// tile elements
+			// go through each x,y		
 			row = Math.floor(i/totalColumns);	
 			column = i % totalColumns;
 			
-			tilePosX = (initialSize + gap) * column;
-			tilePosY = (initialSize + gap) * row;
-		
-			covers[i].updatePosition(i,tilePosX,tilePosY);
-			covers[i].resize(i,(highlightbuffer[i]==1) ? initialSize * 2 + gap : initialSize);
+			console.debug("x,y:", column, row);
+			if(checkArray(row,column) == true) {
+				console.debug("blacklisted",column,row);
+			} else {
+				whiteListCol.push(column);
+				whiteListRow.push(row);
+			}
 			
-			// 
-			// var found = false;
-			// for(var r = 0; r < bufferLimit; r++){
-			// 		
-			// 		 var randRow = Math.floor(Math.random() * (totalColumns - 1));
-			// 		 var randCol=  Math.floor(Math.random() * (totalColumns - 1));
-			// 		
-			// 		//console.debug("row"+r +"is in row" + randRow);
-			// 		//console.debug("col"+r +"is in col" +randCol);
-			// 		
-			// 		if(lookup(randRow,randCol,(highlightbuffer[i] == 1) ? 2 : 1)){
-			// 			tilePosX = randRow * (initialSize + gap);
-			// 			tilePosY = randCol * (initialSize + gap);
-			// 			covers[i].updatePosition(i,tilePosX,tilePosY);
-			// 			found = true;
-			// 			//console.log('found',tilePosX,tilePosY);
-			// 			break;
-			// 		}
-			// }
-			// if(found) covers[i].resize(i,(highlightbuffer[i]==1) ? initialSize * 2 + gap : initialSize);
-						
-							
-
 		});
-	}	
+	
+		//console.debug("whitelistedCols"+whiteListCol);
+		//console.debug("whitelistedRows"+whiteListRow);
+		populate();
+	}
+	
+	function populate() {
+		
+		// we only want to try and place in whitelisted locations		
+		wListPosition = 0;
+		
+		// go through each in buffer
+		$.each(buffer, function(i, l){
+			
+			if(wListPosition < whiteListCol.length) {
+				// Only for ones that aren't highlighted
+				if(highlightbuffer[i] == 0) {
+					
+					smallcovers[i] = new coverSingle(i,l);
+		
+					//console.debug("column normal",column);
+					//console.debug("whitelisted position",whiteListCol[wListPosition], whiteListRow[wListPosition]);
+					
+					//row = Math.floor(i/totalColumns);	
+					//column = i % totalC olumns;
+					
+					tilePosX = whiteListCol[wListPosition] * (initialSize + gap);
+					tilePosY = whiteListRow[wListPosition] * (initialSize + gap);
+					smallcovers[i].updatePosition(i,tilePosX,tilePosY);
+					smallcovers[i].resize(i,initialSize);
+					wListPosition++;
+				} 
+			} else console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition);
+		});
+		
+	}
 	
 	function calculateUp(number){
 		return Math.round((number + 0.1)*100)/100;
@@ -236,7 +295,7 @@ function container() {
 	//console.debug("fit in window height"+Math.round(stageSize()[1]/(initialSize+gap)));
 	
 	grid = new grid(userbuffer,buffer,0);
-	grid.initLookup();
+
 	grid.generate(userbuffer,buffer,0);
 
 }
@@ -258,13 +317,14 @@ function coverSingle(i,l) {
 	   $("#coverback_"+i).css("width", initialSize);
        $("#coverback_"+i).css("height", initialSize);
 
-	   $("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
-
+	   //$("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
+		
+		/*
 	   $("#cover_"+i).hover(function () {
 	   		$(this).find('div').stop().rotate3Di('flip', 200, {direction: 'clockwise', sideChange: mySideChange}); },function () {
        		$(this).find('div').stop().rotate3Di('unflip', 200, {sideChange: mySideChange});
 	   });
-		
+		*/
 
 	  if (typeof(_coverSingle_prototype_called) == 'undefined')	  {
 	     _coverSingle_prototype_called = true;
@@ -294,6 +354,7 @@ function coverSingle(i,l) {
 	 }	
 	*/
 	function resize(i,initialSize){
+		
 		
 		$("#img_"+i).css("width",initialSize);
 		$("#img_"+i).css("height",initialSize);

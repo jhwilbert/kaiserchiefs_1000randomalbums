@@ -2,8 +2,9 @@ body {
     padding: 0px;
     font-family: Arial;
     border: 0 none;
-	background: url("../imgs/generic-background.jpg");
 	overflow:hidden;
+	/*background:#202020;*/
+	background:white;
 }
 
 /* Single Cover */
@@ -38,7 +39,7 @@ body {
 }
 
 .back {
-	background:#dddddd;
+	background:black;
 }
 
 img {
@@ -85,7 +86,7 @@ img {
 	z-index: 5;
 	margin:0px;
 	margin:10px;
-	/*border:1px solid black;*/
+	border:1px solid black;
 }
 .username {
 
