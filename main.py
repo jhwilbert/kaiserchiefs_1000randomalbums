@@ -39,6 +39,8 @@ class MainHandler(webapp.RequestHandler):
 class json(webapp.RequestHandler):
     def get(self):
         q = Counters.all()
+        limit = self.request.get('limit');
+
         for x in q:
             covers = x.json
             self.response.headers['Content-Type'] = 'application/json'
@@ -47,6 +49,8 @@ class json(webapp.RequestHandler):
         
 class scrape(webapp.RequestHandler):
     def get(self):
+	    
+	    # limit counter
 
         counters = db.GqlQuery("SELECT * FROM Counters")
         coverjson = {}
@@ -87,20 +91,20 @@ class scrape(webapp.RequestHandler):
             if len(images) == 0:
                 self.response.out.write('All done (or there was an error)<br>')
             else:               
-                self.response.out.write(counter.counter)
+                #self.response.out.write(counter.counter)
                 src = str(images[0])
                 imageArray = src.split(" ")
                
-                imagepath = imageArray[1].lstrip('src="')[0:-1] # image path
-                #imagepath = imageArray[1].lstrip('src="')[0:-1].lstrip('/service/ResizeImage/316/316/') # image path
-
+                imagepath2 = imageArray[1].lstrip('src="')[0:-1] # image path
+                imagepath = imagepath2.replace("316","200")
                 customservicepath = "/service/ResizeImage/250/250/"
 
+                #fullpath = imagepath 
                 fullpath = 'http://www.kaiserchiefs.com' + imagepath
                 
                 username = imageArray[2].lstrip('alt="')[0:-2] # username
             
-                #count = +=1
+                
                 if username not in coverjson:
                     coverjson[counter.counter] = {"path":  fullpath, "username":  username, "highlight":  0 }
              
@@ -108,6 +112,8 @@ class scrape(webapp.RequestHandler):
                 counter.counter+=1
                 counter.put()
                 #self.response.out.write(fullpath)
+
+                #self.response.out.write(fullpath2)
                 self.response.out.write('<script>document.location="/scrape"</script>')
           
 def main():

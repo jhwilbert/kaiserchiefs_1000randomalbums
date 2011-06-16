@@ -8,33 +8,38 @@
 	<meta name="author" content="Joao Wilbert">
 	
     <link type="text/css" rel="stylesheet" media="screen" href="css/albums.css" />
-	        
-	<script type="text/javascript" src="javascript/jquery-1.6.1.min.js"></script>
-	
-	<script type="text/javascript" src="javascript/albums.js"></script>
-	
-	<script type="text/javascript" src="javascript/Tween.js"></script>
-	<script type="text/javascript" src="javascript/Parallel.js"></script>	
-	<script type="text/javascript" src="javascript/Sequence.js"></script>	
-	<script type="text/javascript" src="javascript/dom-drag.js"></script>	
 
-	<script type="text/javascript" src="javascript/rotate3Di.js"></script>
-	<script type="text/javascript" src="javascript/jquery-css-transform.js"></script>			
-	<script type="text/javascript" src="javascript/mouseWheel.js"></script>	
+	<!-- Jquery 1.6.1-->
+	<script type="text/javascript" src="javascript/plugins/jquery-1.6.1.min.js"></script>
+	
+	<!-- Plugins -->
+	<script type="text/javascript" src="javascript/plugins/Tween.js"></script>
+	<script type="text/javascript" src="javascript/plugins/Parallel.js"></script>	
+	<script type="text/javascript" src="javascript/plugins/Sequence.js"></script>	
+	<script type="text/javascript" src="javascript/plugins/dom-drag.js"></script>		
+	<script type="text/javascript" src="javascript/plugins/rotate3Di.js"></script>
+	<script type="text/javascript" src="javascript/plugins/jquery-css-transform.js"></script>			
+	<script type="text/javascript" src="javascript/plugins/jquery.hoverIntent.minified.js"></script>
+	
+	
+	<!-- Core-->
+	<script type="text/javascript" src="javascript/core/init.js"></script>
+	<script type="text/javascript" src="javascript/core/grid.js"></script>
+	<script type="text/javascript" src="javascript/core/cover.js"></script>
+	<script type="text/javascript" src="javascript/core/window.js"></script>		        
+	<script type="text/javascript" src="javascript/mouse.js"></script>
+
 	<!-- Date: 2011-06-06 -->
 </head>
+
 <body>
 
-
-<div id="topbara">
-
+<div>
 	<div class="menu" id="menu1"><a href="javascript:void(0);" onclick="zoomgrid(1)">in</a></div>
 	<div class="menu" id="menu2"><a href="javascript:void(0);" onclick="zoomgrid(0)">out</a></div>
 </div>
 
-
 <div id="container"></div>
-
 
 </body>
 </html>

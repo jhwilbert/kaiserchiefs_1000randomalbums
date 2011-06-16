@@ -13,7 +13,7 @@ body {
 	text-align:center;
 	color:#8d8d8d;
 	font-style:italic;
-	padding-top:20px;
+
 
 }
 .cover {
@@ -38,9 +38,7 @@ body {
 	text-decoration: none;	
 }
 
-.back {
-	background:black;
-}
+
 
 img {
 	position:absolute;
@@ -80,13 +78,22 @@ img {
 	font-size:11px;
 }
 
+#albumList li {
+	height:200px;
+	width:200px;
+	margin-right:0px;
+	list-style:none;
+	background:red;
+	border:1px solid white;
 
+	
+}
 #container {
 	position:relative;
 	z-index: 5;
 	margin:0px;
 	margin:10px;
-	border:1px solid black;
+	/*border:1px solid black; */
 }
 .username {
 
@@ -101,7 +108,11 @@ img {
 }
 
 .front {
+	position:absolute;
 	
 }
-
+.back {
+	position:absolute;
+	background:black;
+}
 
