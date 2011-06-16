@@ -1,7 +1,7 @@
 /***************************************************** Settings ***************************************/
 
 var feedUrl = 'http://localhost:8181/display'; // path to JSON service
-var bufferLimit = 900; // how many images are loaded from JSON
+var bufferLimit = 450; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
 var gap = 0; // gap between images
 
@@ -67,9 +67,9 @@ $(document).ready(function(){
 
 	  $.each(data, function(key, val) {
 		
-		var index = selectFrom(0, aColors.length-1);
-		var sColor = aColors[index];
-		console.log(sColor);
+		//var index = selectFrom(0, buffer.length-1);
+		//var sColor = buffer[index];
+		//console.log(sColor);
 		
 		if(buffer.length >= bufferLimit) {	
 			offset.push(val.path);
