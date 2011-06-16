@@ -1,4 +1,3 @@
-/***************************************************** Window Scripts  ***************************************/
 function stageSize() {
 	 var viewportwidth;
 	 var viewportheight;

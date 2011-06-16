@@ -17,6 +17,7 @@ body {
 
 }
 .cover {
+	border:1px solid white;
 	position:absolute;
 	font-size:12px;
 	font-weight:normal;

@@ -1,9 +1,9 @@
 /***************************************************** Settings ***************************************/
 
-var feedUrl = 'http://localhost:8181/json'; // path to JSON service
-var bufferLimit = 80; // how many images are loaded from JSON
+var feedUrl = 'http://localhost:8181/display'; // path to JSON service
+var bufferLimit = 900; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
-var gap = 4; // gap between images
+var gap = 0; // gap between images
 
 /***************************************************** Declararations ***************************************/
 
@@ -18,6 +18,11 @@ blackListRow = [];
 blackListCol = [];
 whiteListRow = [];
 whiteListCol = [];
+
+	
+allPaths = [];
+allUsernames = [];
+allHighlights = [];
 
 // General Variables
 var posX;
@@ -43,27 +48,60 @@ var column;
 
 var randRow;
 var randCol;
-var temp = 0;
 
-//var parallel;  
-//var sequence;
-over = false;
+var len;
+
+offset = [];
+useroffset = [];
+highlightoffset = [];
+
+var start = getUrlVars()["start"];
+var end = getUrlVars()["end"];
 
 /***************************************************** Jquery Init Stuff ***************************************/
 
-$(document).ready(function(){	
+$(document).ready(function(){
+	getUrlVars();
+			
 	$.getJSON(feedUrl, function(data) {
-		
+
 	  $.each(data, function(key, val) {
+		
+		var index = selectFrom(0, aColors.length-1);
+		var sColor = aColors[index];
+		console.log(sColor);
+		
 		if(buffer.length >= bufferLimit) {	
-		    //stop adding
+			offset.push(val.path);
+			useroffset.push(val.username);
+			highlightoffset.push(val.highlight);
 		} else {
 			buffer.push(val.path);
 			userbuffer.push(val.username);
 			highlightbuffer.push(val.highlight);
 		}
+			  
 	  });
+
 	
+	container = new container();
+    grid = new grid();
+	preload();
+	
+	//console.debug("initial userbuffer", userbuffer, "length", userbuffer.length);
+	//console.debug("initial offset", useroffset, "length", useroffset.length);
+
+	});	
+
+});
+
+function selectFrom(iFirstValue, iLastValue) {
+    var iChoices = iLastValue - iFirstValue + 1;
+    return Math.floor(Math.random() * iChoices + iFirstValue);
+}
+
+function preload() {		
+	$("#container").html("");   
 	// preload images
 	if (document.images) {
 		preload_image_object = new Image();
@@ -72,37 +110,53 @@ $(document).ready(function(){
 		for(i=0; i<=bufferLimit; i++) 
 	   		preload_image_object.src = buffer[i];
 		}
-		// takes user names, image paths and creates a grid index - starting at 0
-		container();
-	});	
-});
-
-
-/***************************************************** Container   ***************************************/
-
-function container() {
-	// calculate size of the container
-	
-	totalColumns = Math.floor(bufferLimit/Math.sqrt(bufferLimit));
-	containerSize = totalColumns*(initialSize + gap);
-	containerCenter = containerSize/2;
-	
-	$("#container").css("left", (stageSize()[0]/2) - (containerCenter));
-	$("#container").css("top", (stageSize()[1]/2) - (containerCenter));
-	
-	// drag
-	var theRoot = document.getElementById("container");
-	Drag.init(theRoot, null);
-	
-	$("#container").css("width",containerSize);
-	$("#container").css("height",containerSize);
 		
-	
-	// create grid object
-	grid = new grid(userbuffer,buffer,0);
-	grid.generate(userbuffer,buffer,0);
+	// create container object
+	container.init();
+	grid.init();
 
 }
+
+function getUrlVars() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+
+    return vars;
+}
+
+
+console.debug(end)
+/*
+function refresh() {
+	//resetArrays();
+	
+	if(offset < bufferLimit) {
+		console.debug("no more to load"); 
+	} else {
+		console.debug("buffer era",userbuffer,"offset era", useroffset);
+		// paths
+		buffer = offset.slice(0,bufferLimit);
+		offset.splice(0,bufferLimit);		
+		// user
+		userbuffer = useroffset.slice(0,bufferLimit);
+		useroffset.splice(0,bufferLimit);
+		// highlight
+		highlightbuffer = highlightoffset.slice(0,bufferLimit);
+		highlightoffset.splice(0,bufferLimit);		
+
+		preload();
+
+}	}	
+*/	
+
+	
+
 function zoomgrid(direction) {
 	grid.zoom(direction)
 }

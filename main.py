@@ -25,7 +25,7 @@ from google.appengine.ext.webapp import util
 from BeautifulSoup import BeautifulSoup
 from google.appengine.api import urlfetch
 from google.appengine.ext.webapp import template
-
+from django.utils import simplejson as json
 class MainHandler(webapp.RequestHandler):
     def get(self):
     
@@ -39,13 +39,17 @@ class MainHandler(webapp.RequestHandler):
 class json(webapp.RequestHandler):
     def get(self):
         q = Counters.all()
-        limit = self.request.get('limit');
+        #limit = self.request.get('limit');
 
-        for x in q:
+        counters = db.GqlQuery("SELECT * FROM Counters")
+        for x in counters:
             covers = x.json
-            self.response.headers['Content-Type'] = 'application/json'
-            self.response.out.write(covers)
+        
 
+        
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(covers)
+        
         
 class scrape(webapp.RequestHandler):
     def get(self):
@@ -97,7 +101,7 @@ class scrape(webapp.RequestHandler):
                
                 imagepath2 = imageArray[1].lstrip('src="')[0:-1] # image path
                 imagepath = imagepath2.replace("316","200")
-                customservicepath = "/service/ResizeImage/250/250/"
+
 
                 #fullpath = imagepath 
                 fullpath = 'http://www.kaiserchiefs.com' + imagepath
@@ -111,9 +115,6 @@ class scrape(webapp.RequestHandler):
                 counter.json = simplejson.dumps(coverjson)
                 counter.counter+=1
                 counter.put()
-                #self.response.out.write(fullpath)
-
-                #self.response.out.write(fullpath2)
                 self.response.out.write('<script>document.location="/scrape"</script>')
           
 def main():

@@ -1,43 +1,35 @@
-/***************************************************** Grid Object *****************************************************/ 
-function grid(userbuffer,buffer) {	
-		
+/* grid Object */
+
+function grid() {	
+	
+	// Object Constructor ********************************************************************************************/
+	
 	 if (typeof(_grid_prototype_called) == 'undefined') {
 	     _gridprototype_called = true;
-	     grid.prototype.generate = generate;
+	     grid.prototype.init = init;
     	 grid.prototype.zoom = zoom;
     	 grid.prototype.calculateUp = calculateUp;
          grid.prototype.calculateDown = calculateDown;
 		 grid.prototype.checkArray = checkArray;
 		 grid.prototype.createLookup = createLookup;
 		 grid.prototype.populate = populate;
+		 grid.prototype.updateclasses = updateclasses;
 	}
 	
+	// Member Functions  ********************************************************************************************/
 	
-	/************************* Creation and Populating **************************/
 	
-	function checkArray(row,column) {		
-		if ( blackListRow.length > 0 ) {
-			for(var i=0; i < blackListRow.length; i++) {
-				if(blackListRow[i] == row && blackListCol[i] == column ) {
-					return true;
-				}
-				if (i == (blackListRow.length -1) ) return false;
-			}
-		} else {
-			return false;
-		}
-	}
-		
-	function generate(userbuffer,buffer) {
+	function init() {
 
 		$.each(buffer, function(i, l){
-		if( i == buffer.length -1) {
+		if( i == buffer.length - 1 ) {
 			//console.debug();
 			createLookup();
 		} else { 
 			if(highlightbuffer[i] == 1) {
-				covers[i] = new coverSingle(i,l);
-									
+				covers[i] = new coverSingle();
+				covers[i].init(i,l);
+								
 				randRow =  Math.floor(Math.random() * (totalColumns - 1));
 				randCol=  Math.floor(Math.random() * (totalColumns - 1));															
 
@@ -55,13 +47,24 @@ function grid(userbuffer,buffer) {
 				blackListCol.push(randCol,randCol+1,randCol,randCol+1);	
 				
 				covers[i].updatePosition(i,tilePosX,tilePosY);
-				covers[i].resize(i,initialSize * 2);
-										
+				covers[i].resize(i,initialSize * 2);										
 			}
 		}	
 		});
 	}
-	
+	function checkArray(row,column) {		
+		if ( blackListRow.length > 0 ) {
+			for(var i=0; i < blackListRow.length; i++) {
+				if(blackListRow[i] == row && blackListCol[i] == column ) {
+					return true;
+				}
+				if (i == (blackListRow.length -1) ) return false;
+			}
+		} else {
+			return false;
+		}
+	}
+		
 	function createLookup() {
 		$.each(buffer, function(i, l){
 			// go through each x,y		
@@ -86,7 +89,9 @@ function grid(userbuffer,buffer) {
 				// Only for ones that aren't highlighted
 				if(highlightbuffer[i] == 0) {
 					
-					smallcovers[i] = new coverSingle(i,l);										
+					smallcovers[i] = new coverSingle();
+					smallcovers[i].init(i,l);
+											
 					tilePosX = whiteListCol[wListPosition] * (initialSize + gap);
 					tilePosY = whiteListRow[wListPosition] * (initialSize + gap);
 					smallcovers[i].updatePosition(i,tilePosX,tilePosY);
@@ -94,22 +99,10 @@ function grid(userbuffer,buffer) {
 					wListPosition++;
 				} 
 			} else { 
-				console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition); 
-				
+				//console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition); 
 			}
 		});	
-		
-	}
-	
-	/************************* Zoom In/Out **************************/
-	
-	
-	function calculateUp(number){
-		return Math.round((number + 0.1)*100)/100;
-	}
-	
-	function calculateDown(number){
-		return Math.round((number - 0.1)*100)/100;
+		updateclasses();
 	}
 	
 	function zoom(direction) {
@@ -122,11 +115,11 @@ function grid(userbuffer,buffer) {
 				$.each(buffer, function(i, l){
 					if(smallcovers[i] != undefined ) {
 						smallcovers[i].resize(i, initialSize * zoomCover);
-						smallcovers[i].updateBasedonCurrent(i,zoomCover,direction);
+						smallcovers[i].updateZoomPosition(i,zoomCover,direction);
 					}
 					if(covers[i] != undefined ) {
 						covers[i].resize(i, initialSize * zoomCover * 2);
-						covers[i].updateBasedonCurrent(i,zoomCover,direction);
+						covers[i].updateZoomPosition(i,zoomCover,direction);
 					}						
 				});
 				updatedLinkSize = updatedLinkSize - 2;
@@ -141,25 +134,33 @@ function grid(userbuffer,buffer) {
 				$.each(buffer, function(i, l){
 					if(smallcovers[i] != undefined ) {
 						smallcovers[i].resize(i, initialSize * zoomCover);
-						smallcovers[i].updateBasedonCurrent(i,zoomCover,direction);
+						smallcovers[i].updateZoomPosition(i,zoomCover,direction);
 					}
 					if(covers[i] != undefined ) {
 						covers[i].resize(i, initialSize * zoomCover * 2);
-						covers[i].updateBasedonCurrent(i,zoomCover,direction);
+						covers[i].updateZoomPosition(i,zoomCover,direction);
 					}						
 				});				
 				updatedLinkSize = updatedLinkSize + 2;
 				updatedFontSize = updatedFontSize + 1;
 			}
 		}
-		// update container dimensions
-		$("#container").css("width",containerSize * zoomCover);
-		$("#container").css("height",containerSize  * zoomCover);		
-		$("#container").css("left", stageSize()[0]/2 - (containerSize * zoomCover)/2);
-		$("#container").css("top", stageSize()[1]/2 - (containerSize * zoomCover)/2);
+		// updates container object		
+		container.updateDimensions();
+		updateclasses();	
+	}
+	
+	function calculateUp(number){
+		return Math.round((number + 0.1)*100)/100;
+	}
+	
+	function calculateDown(number){
+		return Math.round((number - 0.1)*100)/100;
+	}	
+	function updateclasses() {
+		$(".backcontent").css("padding-top", ((initialSize/2) - 15)* zoomCover + "px");
 		
-		// update text dimensions and padding
-		$(".cover a").css("font-size", updatedLinkSize + "px");
-		$(".cover").css("font-size", updatedFontSize + "px");
+
+		
 	}		
 } // end of grid object

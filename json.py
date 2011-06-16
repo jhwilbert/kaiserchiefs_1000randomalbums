@@ -13,7 +13,9 @@ from models import Counters
 
 # First of all get the pointer number out of pointers
 counters = db.GqlQuery("SELECT * FROM Counters")
+limit = request.get('limit');
 
-print 'Content-Type: application/json; charset=UTF-8'
-print ''
-print counters[0].json
+#print 'Content-Type: application/json; charset=UTF-8'
+print limit
+#print ''
+#print counters[0].json
