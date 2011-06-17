@@ -16,19 +16,20 @@ function coverSingle() {
 	  
 	function init(i,l) {
 	  // create elements based on index as id (#cover_id)
-	   $(document.createElement("div")).attr("id","cover_"+i).appendTo("#container").addClass("cover"); 												     
-	   $(document.createElement("div")).attr("id","coverfront_"+i).appendTo("#cover_"+i).addClass("front");												
-	   $(document.createElement("div")).attr("id","coverback_"+i).appendTo("#cover_"+i).addClass("back").css("display","none");; 													 
+	   $(document.createElement("div")).attr("id","cover_"+i).appendTo("#container").addClass("cover");      
+	   $(document.createElement("div")).attr("id","coverfront_"+i).appendTo("#cover_"+i).addClass("front");
+	   $(document.createElement("div")).attr("id","coverback_"+i).appendTo("#cover_"+i).addClass("back").css("display","none");
 	   $(document.createElement("img")).attr({ src: l }).attr("id","img_"+i).appendTo("#coverfront_"+i);
 
-		// insert back content
+	    // insert back content
 	   $("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
 
 	   // attach rollover event
 	   $("#cover_"+i).hoverIntent(function () {
 			$(this).find('div').stop().rotate3Di('flip', 300, {direction: 'clockwise', sideChange: sidechange});},function () {
-			$(this).find('div').stop().rotate3Di('unflip', 300, {sideChange: sidechange});
-	   });		
+            $(this).find('div').stop().rotate3Di('unflip', 300, {sideChange: sidechange});
+	   });
+	
 	}
 
 

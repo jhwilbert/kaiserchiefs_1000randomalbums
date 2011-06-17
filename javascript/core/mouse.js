@@ -1,11 +1,8 @@
-/** This is high-level function.
- * It must react to delta being more/less than zero.
- */
 function handle(delta) {
-        if (delta < 0)
-			grid.zoom(0)
-        else
-				grid.zoom(1)
+//        if (delta < 0)
+			//grid.zoom(0)
+//        else
+			//grid.zoom(1)
 }
 
 /** Event handler for mouse wheel event.

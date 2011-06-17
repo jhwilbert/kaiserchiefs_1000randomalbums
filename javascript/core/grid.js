@@ -102,7 +102,9 @@ function grid() {
 				//console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition); 
 			}
 		});	
+		//doTimer();
 		updateclasses();
+		
 	}
 	
 	function zoom(direction) {
@@ -150,6 +152,7 @@ function grid() {
 		updateclasses();	
 	}
 	
+
 	function calculateUp(number){
 		return Math.round((number + 0.1)*100)/100;
 	}
@@ -164,3 +167,28 @@ function grid() {
 		
 	}		
 } // end of grid object
+
+
+var c=0;
+var t;
+var timer_is_on=0;
+
+function timedCount() {
+	
+	if(c <= buffer.length-1) {
+		c=c+1;
+		$("#cover_"+c).css("display", "block");
+		console.debug(c);
+	} else {
+		console.debug("all")
+	}
+	t=setTimeout("timedCount()",100);
+	
+}
+
+function doTimer() {
+	if (!timer_is_on) {
+  		timer_is_on=1;
+  		timedCount();
+  }
+}

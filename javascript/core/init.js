@@ -1,7 +1,7 @@
 /***************************************************** Settings ***************************************/
 
 var feedUrl = 'http://localhost:8181/display'; // path to JSON service
-var bufferLimit = 450; // how many images are loaded from JSON
+var bufferLimit = 1300; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
 var gap = 0; // gap between images
 
@@ -55,22 +55,17 @@ offset = [];
 useroffset = [];
 highlightoffset = [];
 
-var start = getUrlVars()["start"];
-var end = getUrlVars()["end"];
 
 /***************************************************** Jquery Init Stuff ***************************************/
 
 $(document).ready(function(){
-	getUrlVars();
-			
+	
+
 	$.getJSON(feedUrl, function(data) {
 
 	  $.each(data, function(key, val) {
 		
-		//var index = selectFrom(0, buffer.length-1);
-		//var sColor = buffer[index];
-		//console.log(sColor);
-		
+
 		if(buffer.length >= bufferLimit) {	
 			offset.push(val.path);
 			useroffset.push(val.username);
@@ -82,15 +77,17 @@ $(document).ready(function(){
 		}
 			  
 	  });
+	
+	bufferLimit = buffer.length;
 
 	
+
+		
 	container = new container();
     grid = new grid();
+
 	preload();
 	
-	//console.debug("initial userbuffer", userbuffer, "length", userbuffer.length);
-	//console.debug("initial offset", useroffset, "length", useroffset.length);
-
 	});	
 
 });
@@ -100,60 +97,32 @@ function selectFrom(iFirstValue, iLastValue) {
     return Math.floor(Math.random() * iChoices + iFirstValue);
 }
 
-function preload() {		
-	$("#container").html("");   
-	// preload images
-	if (document.images) {
-		preload_image_object = new Image();
-		var i = 0;
-	
-		for(i=0; i<=bufferLimit; i++) 
-	   		preload_image_object.src = buffer[i];
-		}
+
+function checkLoaded(){
+	//console.debug(loadedImgs.length);
+	//console.debug("bufferlimit"+buffer.length);
+			
+	if(loadedImgs.length >= buffer.length) {
+		$("#loading").html("");
+		container.init();
+		grid.init();
+	}
+
+}
+
+loadedImgs = [];
+
+function preload() {
 		
-	// create container object
-	container.init();
-	grid.init();
-
+	image = new Image();
+		
+	for(var i = 0; i <= bufferLimit; i++) {
+	   		image.src = buffer[i];
+			loadedImgs.push(image.src);
+			checkLoaded();
+	}
 }
 
-function getUrlVars() {
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-
-    return vars;
-}
-
-
-console.debug(end)
-/*
-function refresh() {
-	//resetArrays();
-	
-	if(offset < bufferLimit) {
-		console.debug("no more to load"); 
-	} else {
-		console.debug("buffer era",userbuffer,"offset era", useroffset);
-		// paths
-		buffer = offset.slice(0,bufferLimit);
-		offset.splice(0,bufferLimit);		
-		// user
-		userbuffer = useroffset.slice(0,bufferLimit);
-		useroffset.splice(0,bufferLimit);
-		// highlight
-		highlightbuffer = highlightoffset.slice(0,bufferLimit);
-		highlightoffset.splice(0,bufferLimit);		
-
-		preload();
-
-}	}	
-*/	
 
 	
 

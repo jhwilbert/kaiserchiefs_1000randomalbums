@@ -35,20 +35,21 @@ class MainHandler(webapp.RequestHandler):
 
         path = os.path.join(os.path.dirname(__file__), 'index.html')
         self.response.out.write(template.render(path, template_values))
+
         
 class json(webapp.RequestHandler):
     def get(self):
         q = Counters.all()
-        #limit = self.request.get('limit');
+        #start = int(self.request.get('start'));
+        #end = int(self.request.get('end'));
 
         counters = db.GqlQuery("SELECT * FROM Counters")
         for x in counters:
-            covers = x.json
-        
-
-        
+            covers = x.json        
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(covers)
+        #totalCovers = len(jsonObj)
+
         
         
 class scrape(webapp.RequestHandler):
@@ -87,7 +88,7 @@ class scrape(webapp.RequestHandler):
                 images = body.findAll("img", height="316")                
             except:
                 print ''
-                #print pointer.pointer
+                print pointer.pointer
                 #print result.status_code
                 #print body
                 sys.exit()
