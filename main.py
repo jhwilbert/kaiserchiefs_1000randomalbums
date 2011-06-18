@@ -26,6 +26,8 @@ from BeautifulSoup import BeautifulSoup
 from google.appengine.api import urlfetch
 from google.appengine.ext.webapp import template
 from django.utils import simplejson as json
+
+
 class MainHandler(webapp.RequestHandler):
     def get(self):
     

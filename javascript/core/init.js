@@ -1,10 +1,3 @@
-/***************************************************** Settings ***************************************/
-
-var feedUrl = 'http://localhost:8181/display'; // path to JSON service
-var bufferLimit = 1300; // how many images are loaded from JSON
-var initialSize = 200; // size (w x h) of each cover
-var gap = 4; // gap between images
-
 /***************************************************** Declararations ***************************************/
 
 //  Arrays
@@ -22,6 +15,7 @@ image = [];
 offset = [];
 highlightoffset = [];
 useroffset = [];
+
 // General Variables
 var posX;
 var posY;
@@ -31,10 +25,8 @@ var direction;
 var zoomCover = 1;
 var zoomgap = 1;
 var finalGap;
-
 var minZoom = 0.1;
 var maxZoom = 1.0;
-
 var fontSize = 12;
 var linkSize = 20;
 var updatedLinkSize = linkSize;
@@ -43,12 +35,15 @@ var finalx;
 var finaly;
 var row;
 var column;
-
 var randRow;
 var randCol;
-
 var len;
 
+// Timers
+var c=0;
+var t;
+var timer_is_on=0;
+var s;
 
 
 /***************************************************** Jquery Init Stuff ***************************************/
@@ -75,7 +70,11 @@ $(document).ready(function(){
 		
 	container = new container();
     grid = new grid();
-
+	loading = new loading();
+	
+	loading.init();
+	
+	loading.displayMessage("Preloading Images");
 	var t=setTimeout("preload()",3000);
 	
 	});	
@@ -90,22 +89,19 @@ function selectFrom(iFirstValue, iLastValue) {
 
 function loadedImg(i) {
 	if(i == buffer.length) {
-		$("#loading").html("");
 		container.init();
-		grid.init();
 	}
-	//console.debug("loaded",i);
 }
 
 
 
 function preload() {
+		
+		
 		for(var i = 0; i <= bufferLimit; i++) {
 		image[i] = new Image();	
 	    image[i].onLoad = loadedImg(i);
 		image[i].src = buffer[i];
-		
-		//console.debug(image[i].src);
 	}		
 }
 

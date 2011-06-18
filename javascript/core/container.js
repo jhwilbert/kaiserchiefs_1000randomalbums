@@ -13,6 +13,8 @@ function container() {
 	}
 	
 	function init() {
+		$("#loading").html("creating container");
+		
 		totalColumns = Math.floor(bufferLimit/Math.sqrt(bufferLimit));
 		containerSize = totalColumns*(initialSize + gap);
 		containerCenter = containerSize/2;
@@ -29,6 +31,9 @@ function container() {
 		$("#container").css("height",containerSize);
 			
 		Drag.init(theRoot, null,0-(containerSize-stageSize()[0]),0,0-(containerSize-stageSize()[1]),0);
+		
+		// populate container with grid
+		grid.init();
 				
 	}
 	

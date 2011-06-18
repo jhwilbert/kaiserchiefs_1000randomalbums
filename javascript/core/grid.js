@@ -20,7 +20,8 @@ function grid() {
 	
 	
 	function init() {
-
+		loading.displayMessage("Populating Grid");
+		
 		$.each(buffer, function(i, l){
 		if( i == buffer.length - 1 ) {
 			//console.debug();
@@ -47,7 +48,7 @@ function grid() {
 				blackListCol.push(randCol,randCol+1,randCol,randCol+1);	
 				
 				covers[i].updatePosition(i,tilePosX,tilePosY);
-				covers[i].resize(i,initialSize * 2);										
+				covers[i].resize(i,initialSize * 2);
 			}
 		}	
 		});
@@ -67,9 +68,9 @@ function grid() {
 		
 	function createLookup() {
 		$.each(buffer, function(i, l){
-			// go through each x,y		
+			// go through each x,y
 			row = Math.floor(i/totalColumns);	
-			column = i % totalColumns;		
+			column = i % totalColumns;
 			//console.debug("x,y:", column, row);
 			if(checkArray(row,column) == true) {
 
@@ -102,11 +103,12 @@ function grid() {
 				//console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition); 
 			}
 		});	
-		//doTimer();
+		var l=setTimeout("display()",2000);
 		updateclasses();
 		
 	}
 	
+
 	function zoom(direction) {
 		if(direction == 0) {
 			// limit minZoom
@@ -125,7 +127,7 @@ function grid() {
 					}						
 				});
 				updatedLinkSize = updatedLinkSize - 2;
-				updatedFontSize = updatedFontSize - 1;				
+				updatedFontSize = updatedFontSize - 1;
 			}
 		} else if(direction == 1) {
 			// limit maxZoom		
@@ -141,8 +143,8 @@ function grid() {
 					if(covers[i] != undefined ) {
 						covers[i].resize(i, initialSize * zoomCover * 2);
 						covers[i].updateZoomPosition(i,zoomCover,direction);
-					}						
-				});				
+					}
+				});
 				updatedLinkSize = updatedLinkSize + 2;
 				updatedFontSize = updatedFontSize + 1;
 			}
@@ -169,26 +171,7 @@ function grid() {
 } // end of grid object
 
 
-var c=0;
-var t;
-var timer_is_on=0;
-
-function timedCount() {
-	
-	if(c <= buffer.length-1) {
-		c=c+1;
-		$("#cover_"+c).css("display", "block");
-		console.debug(c);
-	} else {
-		console.debug("all")
-	}
-	t=setTimeout("timedCount()",100);
-	
-}
-
-function doTimer() {
-	if (!timer_is_on) {
-  		timer_is_on=1;
-  		timedCount();
-  }
+function display() {
+	$("#loading").html("");
+	$(".cover").css("display","block");
 }
