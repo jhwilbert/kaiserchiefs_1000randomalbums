@@ -18,11 +18,7 @@ blackListRow = [];
 blackListCol = [];
 whiteListRow = [];
 whiteListCol = [];
-
-	
-allPaths = [];
-allUsernames = [];
-allHighlights = [];
+image = [];
 
 // General Variables
 var posX;
@@ -51,9 +47,6 @@ var randCol;
 
 var len;
 
-offset = [];
-useroffset = [];
-highlightoffset = [];
 
 
 /***************************************************** Jquery Init Stuff ***************************************/
@@ -79,14 +72,11 @@ $(document).ready(function(){
 	  });
 	
 	bufferLimit = buffer.length;
-
-	
-
 		
 	container = new container();
     grid = new grid();
 
-	preload();
+	var t=setTimeout("preload()",3000);
 	
 	});	
 
@@ -98,30 +88,31 @@ function selectFrom(iFirstValue, iLastValue) {
 }
 
 
-function checkLoaded(){
-	//console.debug(loadedImgs.length);
-	//console.debug("bufferlimit"+buffer.length);
-			
-	if(loadedImgs.length >= buffer.length) {
+function loadedImg(i) {
+	if(i == buffer.length) {
+		console.debug("loaded all");
 		$("#loading").html("");
 		container.init();
 		grid.init();
 	}
-
+	//console.debug("loaded",i);
 }
 
-loadedImgs = [];
+
 
 function preload() {
+	
+		for(var i = 0; i <= bufferLimit; i++) {
+		image[i] = new Image();	
+	    image[i].onLoad = loadedImg(i);
+		image[i].src = buffer[i];
 		
-	image = new Image();
-		
-	for(var i = 0; i <= bufferLimit; i++) {
-	   		image.src = buffer[i];
-			loadedImgs.push(image.src);
-			checkLoaded();
+		console.debug(image[i].src);
+
 	}
+		
 }
+
 
 
 	
