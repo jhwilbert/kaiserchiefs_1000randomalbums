@@ -38,7 +38,17 @@ class MainHandler(webapp.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'index.html')
         self.response.out.write(template.render(path, template_values))
 
-        
+class bufferCount(webapp.RequestHandler):
+    def get(self):	
+        counters = db.GqlQuery("SELECT * FROM Counters")
+        for x in counters:
+            covers = x.json
+        jsonObj = simplejson.loads(covers)  
+        buffers = {"buffer" : len(jsonObj) }
+
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(buffers)
+
 class json(webapp.RequestHandler):
     def get(self):
         q = Counters.all()
@@ -123,6 +133,7 @@ class scrape(webapp.RequestHandler):
 def main():
     application = webapp.WSGIApplication([('/scrape', scrape),
                                           ('/display', json),
+                                          ('/bufferCount', bufferCount),
                                           ('/', MainHandler)],
                                          debug=True)
     util.run_wsgi_app(application)
