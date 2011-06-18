@@ -4,42 +4,50 @@ body {
     border: 0 none;
 	overflow:hidden;
 	/*background:#202020;*/
-	background:white;
+	background:url("../imgs/generic-background.jpg");
 }
 
 /* Single Cover */
 
 .backcontent {
 	text-align:center;
-	color:#8d8d8d;
-	font-style:italic;
-
+	color:white;
+	font-size:20px;
+	font-weight:bold;
+	color:white;
+	font-style:normal;
+	text-decoration: none;
 
 }
 .cover {
-	border:1px solid white;
+	width:200px;
+	height:200px;
+	/*border:1px solid white;*/
 	position:absolute;
 	font-size:12px;
 	font-weight:normal;
 	text-decoration: none;
 
 }
-.cover a:hover {
-	font-size:20px;
-	font-weight:bold;
-	color:#595959;
-	font-style:normal;
-	text-decoration: none;
-}
-.cover a {
-	font-size:20px;
-	font-weight:bold;
-	color:#979797;
-	font-style:normal;
-	text-decoration: none;	
-}
 
 
+.front {
+	position:absolute;
+	width: 200px;
+	height:200px;
+	
+}
+.image {
+	width:200px;
+	height:200px;
+}
+.back {
+	width:200px;
+	height:200px;
+	position:absolute;
+	background:#404040;
+	cursor:pointer;
+}
 
 img {
 	position:absolute;
@@ -85,16 +93,14 @@ img {
 	margin-right:0px;
 	list-style:none;
 	background:red;
-	border:1px solid white;
+	/*border:1px solid white;*/
 
 	
 }
 #container {
-	position:relative;
-	z-index: 5;
+	position:absolute;
 	margin:0px;
-	margin:10px;
-	/*border:1px solid black; */
+	border:1px solid black;
 }
 .username {
 
@@ -108,12 +114,4 @@ img {
 	filter:alpha(opacity=0);
 }
 
-.front {
-	position:absolute;
-	
-}
-.back {
-	position:absolute;
-	background:black;
-}
 

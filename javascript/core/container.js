@@ -1,5 +1,5 @@
 /* Container Object */
-
+var containerSize;
 function container() {
 
 	// Object Constructor ********************************************************************************************/
@@ -17,21 +17,32 @@ function container() {
 		containerSize = totalColumns*(initialSize + gap);
 		containerCenter = containerSize/2;
 
-		$("#container").css("left", (stageSize()[0]/2) - (containerCenter));
-		$("#container").css("top", (stageSize()[1]/2) - (containerCenter));
+		startPointX = (stageSize()[0]/2) - (containerCenter);
+		startPointY = (stageSize()[0]/2) - (containerCenter);
+		
+		$("#container").css("left", startPointX);
+		$("#container").css("top", startPointY);
 
-		// drag
 		var theRoot = document.getElementById("container");
-		Drag.init(theRoot, null);
-
+		
 		$("#container").css("width",containerSize);
 		$("#container").css("height",containerSize);
 			
+		Drag.init(theRoot, null,0-(containerSize-stageSize()[0]),0,0-(containerSize-stageSize()[1]),0);
 				
 	}
 	
 	// Member Functions  ********************************************************************************************/
 	
+	function monitorDrag() {
+		var p = $("#container");				
+		var position = p.position();
+		currx = position.left;
+		curry = position.top;
+		
+		console.debug(currx);
+		
+	}
 	function updateDimensions(){
 		// update container dimensions
 		$("#container").css("width",containerSize * zoomCover);

@@ -12,6 +12,7 @@ function coverSingle() {
 	     coverSingle.prototype.resize = resize;
 		 coverSingle.prototype.updateZoomPosition = updateZoomPosition;
 		 coverSingle.prototype.sidechange = sidechange;
+		 coverSingle.prototype.rotated = rotated;
 	  }
 	  
 	function init(i,l) {
@@ -22,11 +23,11 @@ function coverSingle() {
 	   $(document.createElement("img")).attr({ src: l }).attr("id","img_"+i).appendTo("#coverfront_"+i);
 
 	    // insert back content
-	   $("#coverback_"+i).html('<div class="backcontent">Created By:<br><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'">'+userbuffer[i]+'</a></div>');
+	   $("#coverback_"+i).html('<div class="backcontent">'+userbuffer[i]+'s<br>album</div>');
 
 	   // attach rollover event
 	   $("#cover_"+i).hoverIntent(function () {
-			$(this).find('div').stop().rotate3Di('flip', 300, {direction: 'clockwise', sideChange: sidechange});},function () {
+			$(this).find('div').stop().rotate3Di('flip', 300, {direction: 'clockwise', sideChange: sidechange, complete: rotated(i)});},function () {
             $(this).find('div').stop().rotate3Di('unflip', 300, {sideChange: sidechange});
 	   });
 	
@@ -39,6 +40,7 @@ function coverSingle() {
 		$("#cover_"+i).css("top",y);
 		$("#cover_"+i).css("left",x);		
 	 }		
+	
 	
 	function updateZoomPosition(i,zoomCover,direction) {
 		var p = $("#cover_"+i);				
@@ -75,7 +77,14 @@ function coverSingle() {
 	    }
 	}
 	
+	function rotated(i) {
+		$("#cover_"+i).click(function() {
+		  window.open("http://www.kaiserchiefs.com/"+userbuffer[i]);
+		});
+	}
+	
 	function resize(i,initialSize){
+		
 		$("#img_"+i).css("width",initialSize);
 		$("#img_"+i).css("height",initialSize);
 		

@@ -3,7 +3,7 @@
 var feedUrl = 'http://localhost:8181/display'; // path to JSON service
 var bufferLimit = 1300; // how many images are loaded from JSON
 var initialSize = 200; // size (w x h) of each cover
-var gap = 0; // gap between images
+var gap = 4; // gap between images
 
 /***************************************************** Declararations ***************************************/
 
@@ -19,7 +19,9 @@ blackListCol = [];
 whiteListRow = [];
 whiteListCol = [];
 image = [];
-
+offset = [];
+highlightoffset = [];
+useroffset = [];
 // General Variables
 var posX;
 var posY;
@@ -52,12 +54,10 @@ var len;
 /***************************************************** Jquery Init Stuff ***************************************/
 
 $(document).ready(function(){
-	
+	$("a[@href^='http']").attr('target','_blank');
 
 	$.getJSON(feedUrl, function(data) {
-
 	  $.each(data, function(key, val) {
-		
 
 		if(buffer.length >= bufferLimit) {	
 			offset.push(val.path);
@@ -90,7 +90,6 @@ function selectFrom(iFirstValue, iLastValue) {
 
 function loadedImg(i) {
 	if(i == buffer.length) {
-		console.debug("loaded all");
 		$("#loading").html("");
 		container.init();
 		grid.init();
@@ -101,21 +100,14 @@ function loadedImg(i) {
 
 
 function preload() {
-	
 		for(var i = 0; i <= bufferLimit; i++) {
 		image[i] = new Image();	
 	    image[i].onLoad = loadedImg(i);
 		image[i].src = buffer[i];
 		
-		console.debug(image[i].src);
-
-	}
-		
+		//console.debug(image[i].src);
+	}		
 }
-
-
-
-	
 
 function zoomgrid(direction) {
 	grid.zoom(direction)
