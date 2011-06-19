@@ -50,7 +50,7 @@ var s;
 
 $(document).ready(function(){
 	$("a[@href^='http']").attr('target','_blank');
-
+	
 	$.getJSON(feedUrl, function(data) {
 	  $.each(data, function(key, val) {
 

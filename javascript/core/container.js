@@ -13,7 +13,7 @@ function container() {
 	}
 	
 	function init() {
-		$("#loading").html("creating container");
+		loading.displayMessage("Creating Container");
 		
 		totalColumns = Math.floor(bufferLimit/Math.sqrt(bufferLimit));
 		containerSize = totalColumns*(initialSize + gap);

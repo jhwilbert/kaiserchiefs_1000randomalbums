@@ -25,7 +25,7 @@ function coverSingle() {
 	
 	   var username = userbuffer[i].toUpperCase();
 	    // insert back content
-	   $("#coverback_"+i).html('<div class="backcontent">'+ username+'s<br>ALBUM</div>');
+	   $("#coverback_"+i).html('<div class="backcontent">'+ username+'\'s<br>ALBUM</div>');
 
 	   // attach rollover event
 	   $("#cover_"+i).hoverIntent(function () {

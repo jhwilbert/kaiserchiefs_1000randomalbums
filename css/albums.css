@@ -1,134 +1,71 @@
+/* CSS */
+
 body {	
     padding: 0px;
-    font-family: "P22JohnstonUndergroundBold";
-    border: 0 none;
+	margin: 0px;
 	overflow:hidden;
-	color:#9B9A9A;
-	/*background:#202020;*/
 	background:url("../imgs/generic-background.jpg");
 }
 
-/* Single Cover */
-
-.backcontent {
-	text-align:center;
-	color:white;
-	font-size:22px;
-	color:white;
-	font-style:normal;
-	text-decoration: none;
-
-}
-
-#loading {
+/* Container */
+#container {
 	position:absolute;
-	width:300px;
-	height:20px;
-	/*border:1px solid;*/
-	color:#9B9A9A;
-	font-family:"P22JohnstonUndergroundBold";
-	font-size:18px;
-	text-align:center;		
+	margin:0px;
 }
+
+/* Single Cover */
 .cover {
 	color:#9B9A9A;
 	font-family:"P22JohnstonUndergroundBold";
 	display:none;
-	/*border:1px solid white;*/
 	position:absolute;
-	font-size:12px;
-
 }
 
+.backcontent {
+	text-align:center;
+	color:white;
+	font-size:18px;
+	color:#f0f0f0;
+}
 .front {
 	position:absolute;
-	width: 200px;
-	height:200px;
-	
 }
-.image {
-	width:200px;
-	height:200px;
-}
+
 .back {
-	width:200px;
-	height:200px;
 	position:absolute;
 	background:#404040;
 	cursor:pointer;
 }
 
-img {
-	position:absolute;
+.image {
+	width:200px;
+	height:200px;
 }
 
-/* menu */
+/* loading */
+#loading {
+	position:absolute;
+	width:300px;
+	height:20px;
+	color:#9B9A9A;
+	font-family:"P22JohnstonUndergroundBold";
+	font-size:18px;
+	text-align:center;		
+}
 
-.menu {
-
-	width:40px;
-	z-index: 15;
-	float:left;
-	background:#5d5d5d;
-	margin:5px;
-	padding:5px;
+#animation {
 	text-align:center;
 }
 
-#menu1 {
-	position:absolute;
-	top:10px;
-	left:10px;
-}
 
-#menu2 {
-	top:10px;
-	left:70px;
-	position:absolute;
-		
-}
-
-.menu a{
-
-	color:#f1f2ed;
-	font-size:11px;
-}
-
-#albumList li {
-	height:200px;
-	width:200px;
-	margin-right:0px;
-	list-style:none;
-	background:red;
-	/*border:1px solid white;*/
-
-	
-}
-#container {
-	position:absolute;
-	margin:0px;
-
-}
-.username {
-
-	position:absolute;
-	background:black;
-	padding-top:10px;
-	color:white;
-	display:none;
-	text-align: left;
-	opacity:0.4;
-	filter:alpha(opacity=0);
-}
-
-/* 3. fonts (licences: http://www.fontspring.com/fonts/p22/p22-johnston-underground#fontface_license)  */
+/* Fonts (licences: http://www.fontspring.com/fonts/p22/p22-johnston-underground#fontface_license)  */
 @font-face {
 	font-family: "P22JohnstonUndergroundRegular";
 	src: url("../fonts/P22JoUnd-Reg-webfont.eot");
 	src: url("../fonts/P22JoUnd-Reg-webfont.eot?iefix") format("eot"),
-		url("../fonts/P22JoUnd-Reg-webfont.woff") format("woff"),
-		url("../fonts/P22JoUnd-Reg-webfont.ttf") format("truetype"),
-		url("../fonts/P22JoUnd-Reg-webfont.svg#webfontmHOlrqzp") format("svg");
+	url("../fonts/P22JoUnd-Reg-webfont.woff") format("woff"),
+	url("../fonts/P22JoUnd-Reg-webfont.ttf") format("truetype"),
+	url("../fonts/P22JoUnd-Reg-webfont.svg#webfontmHOlrqzp") format("svg");
 	font-weight: normal;
 	font-style: normal;
 }
@@ -137,9 +74,9 @@ img {
 	font-family: "P22JohnstonUndergroundBold";
 	src: url("../fonts/P22JoUnd-Bol-webfont.eot");
 	src: url("../fonts/P22JoUnd-Bol-webfont.eot?iefix") format("eot"),
-		url("../fonts/P22JoUnd-Bol-webfont.woff") format("woff"),
-		url("../fonts/P22JoUnd-Bol-webfont.ttf") format("truetype"),
-		url("../fonts/P22JoUnd-Bol-webfont.svg#webfontVUyfW3Ct") format("svg");
+	url("../fonts/P22JoUnd-Bol-webfont.woff") format("woff"),
+	url("../fonts/P22JoUnd-Bol-webfont.ttf") format("truetype"),
+	url("../fonts/P22JoUnd-Bol-webfont.svg#webfontVUyfW3Ct") format("svg");
 	font-weight: normal;
 	font-style: normal;
 }
