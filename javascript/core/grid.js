@@ -103,10 +103,9 @@ function updateclasses() {
 	
 }		
 
-
 function display() {    
     //$("#container").fadeIn("slow");
     $("#container").css("display","block");
 	$("#loading").html("");
-	//
+
 }

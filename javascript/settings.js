@@ -9,7 +9,7 @@ var bufferUrl = 'http://localhost:8181/bufferCount'; // path to the buffer count
 //var bufferUrl = 'http://kaiserchiefsalbums.appspot.com/bufferCount'; // path to the buffer counter
 
 /* Buffering */
-//var bufferLimit = 1000; // how many images are loaded from JSON uncomment next line to load all
+//var bufferLimit = 500; // how many images are loaded from JSON uncomment next line to load all
 var bufferLimit;
 
 /* Layout */

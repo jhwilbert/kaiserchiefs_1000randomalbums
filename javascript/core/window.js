@@ -49,9 +49,9 @@ function removeEventSimple(obj,evt,fn) {
 	}
 }
 
-/*
-window.onresize=function(){
 
+window.onresize=function(){
+	loading.updatePosition();
 }
 
-*/
+

@@ -27,17 +27,6 @@ from google.appengine.api import urlfetch
 from google.appengine.ext.webapp import template
 from django.utils import simplejson as json
 
-class TestHandler(webapp.RequestHandler):
-    def get(self):
-    
-        template_values = {
-            'greetings': 'greetings',
-        }
-
-        path = os.path.join(os.path.dirname(__file__), 'test.html')
-        self.response.out.write(template.render(path, template_values))
-
-
 class MainHandler(webapp.RequestHandler):
     def get(self):
     
@@ -62,18 +51,13 @@ class bufferCount(webapp.RequestHandler):
 class json(webapp.RequestHandler):
     def get(self):
         q = Counters.all()
-        #start = int(self.request.get('start'));
-        #end = int(self.request.get('end'));
-
         counters = db.GqlQuery("SELECT * FROM Counters")
         for x in counters:
             covers = x.json        
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write(covers)
-        #totalCovers = len(jsonObj)
 
-        
-        
+
 class scrape(webapp.RequestHandler):
     def get(self):
 	    
@@ -111,8 +95,6 @@ class scrape(webapp.RequestHandler):
             except:
                 print ''
                 print pointer.pointer
-                #print result.status_code
-                #print body
                 sys.exit()
                 
             if len(images) == 0:
@@ -122,23 +104,23 @@ class scrape(webapp.RequestHandler):
                 src = str(images[0])
                 imageArray = src.split(" ")
                
-                imagepath2 = imageArray[1].lstrip('src="')[0:-1] # image path
-                imagepath = imagepath2.replace("316","200")
-
-                fullpath = 'http://www.kaiserchiefs.com' + imagepath
-                
+                stripedPath = imageArray[1].lstrip('src="')[0:-1] # image path               
                 username = imageArray[2].lstrip('alt="')[0:-2] # username
 
                 highlighted = ["caskie","Davidtennant","Simonpegg","Christopher","Drownedinsound","Guardianmusic","Artrockerdotcom","thisisfakediy"]
                 
                 if username not in coverjson:
                     if username in highlighted:
-                        coverjson[counter.counter] = {"path":  fullpath, "username":  username, "highlight":  1 }
+                        imagepath = 'http://www.kaiserchiefs.com' + stripedPath.replace("/service/ResizeImage/316/316/","/service/ResizeImage/400/400/")
+                        coverjson[counter.counter] = {"path":  imagepath, "username":  username, "highlight":  1 }
                     else:
-                        coverjson[counter.counter] = {"path":  fullpath, "username":  username, "highlight":  0 }
+                        imagepath = 'http://www.kaiserchiefs.com' + stripedPath.replace("/service/ResizeImage/316/316/","/service/ResizeImage/200/200/")
+                        coverjson[counter.counter] = {"path":  imagepath, "username":  username, "highlight":  0 }
+                
                 
                 self.response.out.write(counter.counter)
                 self.response.out.write(username)
+                self.response.out.write(imagepath)
 
                 counter.json = simplejson.dumps(coverjson)
                 counter.counter+=1
@@ -148,7 +130,6 @@ class scrape(webapp.RequestHandler):
 def main():
     application = webapp.WSGIApplication([('/scrape', scrape),
                                           ('/display', json),
-                                          ('/test', TestHandler),
                                           ('/bufferCount', bufferCount),
                                           ('/', MainHandler)],
                                          debug=True)

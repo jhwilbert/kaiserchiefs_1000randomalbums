@@ -2,6 +2,7 @@
 
 function loading() {
 	this.displayMessage  = displayMessage;
+	this.updatePosition = updatePosition;
 	
 	$("#loading").css("top",stageSize()[1]/2 - 50);
 	$("#loading").css("left",stageSize()[0]/2 - 100);
@@ -9,6 +10,7 @@ function loading() {
 
 // Member Functions  ********************************************************************************************/
 	
+
 
 function displayMessage(message) {
 	$("#msg").html(message);

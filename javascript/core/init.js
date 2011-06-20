@@ -44,6 +44,7 @@ var s;
 $(document).ready(function(){
 	
 	loading = new loading();
+	loading.updatePosition();
 	loading.displayMessage("Loading Feed");
 	
 	s=setTimeout("getJSON()",1000);
