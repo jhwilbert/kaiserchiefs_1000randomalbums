@@ -34,7 +34,7 @@ function grid() {
 			blackListCol.push(randCol,randCol+1,randCol,randCol+1);	
 			
 			covers[i].updatePosition(i,tilePosX,tilePosY);
-			covers[i].resize(i,initialSize * 2 + 4);
+			covers[i].resize(i,initialSize * 2 + gap);
 		}
 	}	
 	});
