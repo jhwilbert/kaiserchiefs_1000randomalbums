@@ -4,6 +4,7 @@ body {
     padding: 0px;
 	margin: 0px;
 	overflow:hidden;
+		text-align:center;
 	background:url("../imgs/generic-background.jpg");
 }
 
@@ -22,11 +23,15 @@ body {
 	position:absolute;
 }
 
-.backcontent {
+.backcontent a {
 	text-align:center;
-	color:white;
+	/*color:#9B9A9A;*/
+	text-decoration:none;
 	font-size:18px;
 	color:#f0f0f0;
+}
+.backcontent a:hover {
+	color:#cfcfcf;
 }
 .front {
 	position:absolute;

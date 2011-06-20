@@ -50,8 +50,8 @@ function removeEventSimple(obj,evt,fn) {
 }
 
 
-window.onresize=function(){
-	loading.updatePosition();
+window.onresize = function(){
+	loading.updateLoadingPosition();
 }
 
 

@@ -20,7 +20,7 @@ function initCover(i,l) {
 
    var username = userbuffer[i].toUpperCase();
     // insert back content
-   $("#coverback_"+i).html('<div class="backcontent">'+ username+'\'s<br>ALBUM</div>');
+   $("#coverback_"+i).html('<div class="backcontent"><a href="http://www.kaiserchiefs.com/'+userbuffer[i]+'" target="_blank">'+ username+'\'s<br>ALBUM</a></div>');
 
    // attach rollover event
    $("#cover_"+i).hoverIntent(function () {
@@ -46,7 +46,7 @@ function sidechange(front) {
 }
 
 function rotated(i) {
-	s = setTimeout("enableClick("+i+")",600);
+	//s = setTimeout("enableClick("+i+")",600);
 }
 
 function resize(i,initialSize){
@@ -65,6 +65,6 @@ function resize(i,initialSize){
 }
 
 function enableClick(i) {
-	clearInterval(s)
-	$("#cover_"+i).click(function() { window.open("http://www.kaiserchiefs.com/"+userbuffer[i]);})
+	//clearInterval(s)
+	//$("#cover_"+i).click(function() { window.open("http://www.kaiserchiefs.com/"+userbuffer[i]);})
 }

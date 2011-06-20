@@ -28,6 +28,12 @@ function container() {
 		
 	Drag.init(theRoot, null,0-(containerSize-stageSize()[0]),0,0-(containerSize-stageSize()[1]),0);
 	
+	var containerA = document.getElementById("container");
+	theRoot.onDrag = function(x, y) {// x, y contains current offset coords of drag
+		
+		console.debug(buffer);
+	}
+	
 	grid = new grid();
 	
 }
@@ -46,3 +52,5 @@ function updateDimensions() {
 	$(".cover a").css("font-size", updatedLinkSize + "px");
 	$(".cover").css("font-size", updatedFontSize + "px");
 }
+
+

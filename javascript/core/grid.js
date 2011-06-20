@@ -96,6 +96,9 @@ function populate() {
 	var l=setTimeout("display()",3000);
 	updateclasses();
 	
+	// clean buffer
+	buffer = [];
+	
 }
 	
 function updateclasses() {
