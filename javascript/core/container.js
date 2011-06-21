@@ -3,7 +3,7 @@ var containerSize;
 
 
 function container() {
-	loading.displayMessage("Creating Layout");
+	loading.displayMessage("click and drag to move around");
 	
 	$('body').append('<div id="container"></div>');
 	
@@ -31,7 +31,6 @@ function container() {
 	var containerA = document.getElementById("container");
 	theRoot.onDrag = function(x, y) {// x, y contains current offset coords of drag
 		
-		console.debug(buffer);
 	}
 	
 	grid = new grid();

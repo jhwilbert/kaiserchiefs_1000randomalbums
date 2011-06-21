@@ -16,7 +16,7 @@ function grid() {
 		if(highlightbuffer[i] == 1) {
 			covers[i] = new coverSingle();
 			covers[i].initCover(i,l);
-							
+
 			randRow =  Math.floor(Math.random() * (totalColumns - 1));
 			randCol=  Math.floor(Math.random() * (totalColumns - 1));
 
