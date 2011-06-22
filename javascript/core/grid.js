@@ -1,13 +1,12 @@
 /* grid Object */
 
 function grid() {	
-	
+		
 	this.checkArray = checkArray;
 	this.createLookup = createLookup;
 	this.populate = populate;
 	this.updateclasses = updateclasses;
 	this.display = display;
-	
 	
 	$.each(buffer, function(i, l){
 	if( i == buffer.length - 1 ) {
@@ -93,7 +92,8 @@ function populate() {
 			//console.debug("reached end of whitelist. it is only ", whiteListCol.length, wListPosition); 
 		}
 	});	
-	var l=setTimeout("display()",3000);
+	display();
+	//var l=setTimeout("display()",3000);
 	updateclasses();
 	
 	// clean buffer

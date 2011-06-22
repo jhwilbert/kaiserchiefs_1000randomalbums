@@ -3,7 +3,6 @@ var containerSize;
 
 
 function container() {
-	loading.displayMessage("click and drag to move around");
 	
 	$('body').append('<div id="container"></div>');
 	

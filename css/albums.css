@@ -4,7 +4,7 @@ body {
     padding: 0px;
 	margin: 0px;
 	overflow:hidden;
-		text-align:center;
+	text-align:center;
 	background:url("../imgs/generic-background.jpg");
 }
 
@@ -23,6 +23,12 @@ body {
 	position:absolute;
 }
 
+.loadcover {
+	position:absolute;
+	width:150px;
+	height:150px;
+	background:#e8e8e8;
+}
 .backcontent a {
 	text-align:center;
 	/*color:#9B9A9A;*/
@@ -37,6 +43,19 @@ body {
 	position:absolute;
 }
 
+#ienotice {
+	position:absolute;
+	top:20px;
+	left: 50%;
+	margin-left: -200px;
+	font-size:12px;
+	width: 400px;
+	background:#ff8d8d;
+	color:white;
+	font-family: Arial;
+	padding:20px;
+	font-weight:bold;
+}
 .back {
 	position:absolute;
 	background:#404040;
@@ -51,7 +70,7 @@ body {
 /* loading */
 #loading {
 	position:absolute;
-	width:300px;
+	width:500px;
 	height:20px;
 	color:#9B9A9A;
 	font-family:"P22JohnstonUndergroundBold";

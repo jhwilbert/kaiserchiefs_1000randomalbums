@@ -41,11 +41,13 @@ var s;
 /***************************************************** Jquery Init Stuff ***************************************/
 
 $(document).ready(function(){
+
+	// start loading message
 	loading = new loading();
-	loading.displayMessage("Loading 1000 Random Albums");
+	loading.displayMessage("Loading 1000 Random Albums<br>click and drag to move around");
 	
-	s=setTimeout("getJSON()",1000);	
-	$("a[@href^='http']").attr('target','_blank');	
+	s=setTimeout("getJSON()",1000);
+	
 });
 
 function getJSON() {
@@ -60,13 +62,14 @@ function getJSON() {
 				
 			}
 		});
+			container = new container();
 	});
-	s=setTimeout("preload()",3000);
 }
 
+/*
 function preload() {	
 	clearTimeout(s);
-	var async = 100 ;
+	var async = 200 ;
 	
 	$({}).imageLoader({
 		images: buffer,
@@ -80,3 +83,4 @@ function preload() {
 		}
 	});	
 }
+*/

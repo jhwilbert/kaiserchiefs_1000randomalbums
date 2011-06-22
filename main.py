@@ -39,6 +39,13 @@ class MainHandler(webapp.RequestHandler):
 
 
 ############################################ Json ############################################
+class outputdb(webapp.RequestHandler):
+    def get(self):
+        counters = db.GqlQuery("SELECT * FROM Counters")
+        for x in counters:
+            covers = x.json        
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write(covers)
 
 class output(webapp.RequestHandler):
     def get(self):  
@@ -232,6 +239,7 @@ class countHighlighted(webapp.RequestHandler):
 def main():
     application = webapp.WSGIApplication([('/scrape', scrape),
                                           ('/output', output),
+                                          ('/outputdb', outputdb),
                                           ('/countscraped', countScraped),
                                           ('/counthighlighted', countHighlighted),
                                           ('/highlight', highlight),
