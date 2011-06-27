@@ -3,6 +3,7 @@ var containerSize;
 
 
 function container() {
+	// define the container and update size and positions
 	
 	$('body').append('<div id="container"></div>');
 	
@@ -32,6 +33,7 @@ function container() {
 		
 	}
 	
+	// creates new cover layout grid
 	grid = new grid();
 	
 }

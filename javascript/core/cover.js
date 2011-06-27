@@ -14,15 +14,12 @@ function initCover(i,l) {
 	$(document.createElement("div")).attr("id","cover_"+i).appendTo("#container").addClass("cover");
 	$(document.createElement("div")).attr("id","coverfront_"+i).appendTo("#cover_"+i).addClass("front");
 	$(document.createElement("div")).attr("id","coverback_"+i).appendTo("#cover_"+i).addClass("back").css("display","none");      
-		
-	if(highlightbuffer[i] == 1) { 
-		$("#coverfront_"+i).html("<div class='loadBig'></div>");		
-	} else {
-		$("#coverfront_"+i).html("<div class='loadSmall'></div>");
-	}
+	
+	// define loader spaces	
+	if(highlightbuffer[i] == 1) { 	$("#coverfront_"+i).html("<div class='loadBig'></div>"); } else {	$("#coverfront_"+i).html("<div class='loadSmall'></div>"); 	}
 	
 	$(document.createElement("img")).attr({ src: l }).attr("id","img_"+i).appendTo("#coverfront_"+i).load(function(){ $("#coverfront_"+i).html(""); 	$("#coverfront_"+i).append($(this)); });
-	//$(document.createElement("img")).attr({ src: l }).attr("id","img_"+i).appendTo("#coverfront_"+i);
+
 	
 	var username = userbuffer[i].toUpperCase();
 	// insert back content
