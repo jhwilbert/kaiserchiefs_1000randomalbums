@@ -17,8 +17,8 @@ function container() {
 	startPointY = (stageSize()[0]/2) - (containerCenter);
 	
 	
-	//$("#container").css("left", startPointX);
-	//$("#container").css("top", startPointY);
+	$("#container").css("left", startPointX);
+	$("#container").css("top", startPointY);
 
 	var theRoot = document.getElementById("container");
 	

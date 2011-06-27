@@ -23,12 +23,20 @@ body {
 	position:absolute;
 }
 
-.loadcover {
+.loadSmall {
+	width: 150px;
+	height: 150px;
 	position:absolute;
-	width:150px;
-	height:150px;
 	background:#e8e8e8;
 }
+
+.loadBig {
+	width: 300px;
+	height: 300px;
+	position:absolute;
+	background:#e8e8e8;
+}
+
 .backcontent a {
 	text-align:center;
 	/*color:#9B9A9A;*/

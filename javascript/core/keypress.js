@@ -1,64 +1,48 @@
-/*
-keyinit();
+$(document).bind('keydown', 'down', moveDown);
+$(document).bind('keydown', 'right', moveRight);
 
-function keyinit()
-{
-    if (document.addEventListener)
-    {
-       document.addEventListener("keydown",keydown,false);
-       document.addEventListener("keypress",keydown,false);
-       document.addEventListener("keyup",keydown,false);
-    }
-    else if (document.attachEvent)
-    {
-       document.attachEvent("onkeydown", keydown);
-       document.attachEvent("onkeypress", keydown);
-       document.attachEvent("onkeyup", keydown);
+$(document).bind('keydown', 'left', moveLeft);
+//$(document).bind('keydown', 'up', moveUp);
 
-    }
-    else
-    {
-       document.onkeydown= keydown;
-       document.onkeypress= keydown;
-       document.onkeyup= keydown;
+
+
+var moverPos;
+var topPos;
+var leftPos;
+
+function moveDown() {
+	moverPos = $("#container").position();
+	topPos = moverPos.top	
+	if(topPos >= 0) {
+		$("#container").css("top",0 + "px");
+	} else {
+		topPos += 20;
+ 		$("#container").css("top",topPos + "px");
 	}
 }
 
+/* right & left */
 
-function keydown(e) {
-	if (!e) e= event;
-	
-	console.debug(e);
-	
-	var mover = $("#container");
-	var moverPos = mover.position();
-	var left = moverPos.left;
-	var top = moverPos.top;
-
-	
-	var addTop = function(diff) {
-        //$mover.css("top", ($mover.position().top + diff) + "px"); 
-		top += diff;
- 		$("#container").css("top", top + "px");
-	}
-
-	var addLeft = function(diff) {
-        //$mover.css("left", ($mover.position().left + diff) + "px");
-        //if using tracked position:
-		left += diff;
-		$("#container").css("left", left + "px");
-    }
-
-
-	switch(e.keyCode) {
-		case 37: //left
-			addLeft(-1); break; 
-		case 38: //up
-			addTop(-1); break;
-		case 39: //right
-			addLeft(1); break;
-		case 40: //down
-			addTop(1); break;
+function moveRight() {
+	moverPos = $("#container").position();
+	leftPos = moverPos.left	
+	if(leftPos >= 0) {
+		$("#container").css("left",0 + "px");
+	} else {
+		leftPos += 20;
+ 		$("#container").css("left", leftPos + "px");
 	}
 }
-*/
+
+function moveLeft() {
+	moverPos = $("#container").position();
+	leftPos = moverPos.left	
+	
+	//if(leftPos >= -3360) {
+	//	$("#container").css("left",-3360 + "px");
+	//} else {
+		leftPos -= 20;
+ 		$("#container").css("left", leftPos + "px");
+ 		console.debug(leftPos);
+	//}
+}
