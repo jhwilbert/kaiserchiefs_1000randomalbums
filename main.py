@@ -74,9 +74,9 @@ class highlight(webapp.RequestHandler):
         # get highlighted album from request
         usernameHighlighted = self.request.get("username")
         url = 'http://www.kaiserchiefs.com/'+usernameHighlighted
-        
+
         result = urlfetch.fetch(url=url)
-        
+
         # scrape image from page
         if result.status_code != 200:
             self.response.out.write('Couldnt find album')
@@ -94,15 +94,15 @@ class highlight(webapp.RequestHandler):
             else:
                 src = str(image[0])
                 imageArray = src.split(" ")
-               
+
                 stripedPath = imageArray[1].lstrip('src="')[0:-1] # image path               
                 username = imageArray[2].lstrip('alt="')[0:-2] # username
-                
+
                 if username not in coverjson:
                      imagepath = 'http://www.kaiserchiefs.com' + stripedPath.replace("/service/ResizeImage/316/316/","/service/ResizeImage/300/300/")
                      coverjson[counter.counter] = {"path":  imagepath, "username":  username, "highlight":  1 }
-                
-                
+
+
                 self.response.out.write(counter.counter)
                 self.response.out.write(username)
                 self.response.out.write(imagepath)
@@ -110,8 +110,6 @@ class highlight(webapp.RequestHandler):
                 counter.json = simplejson.dumps(coverjson)
                 counter.counter-=1
                 counter.put()
-
-
 ############################################ Scraping ############################################           
 # Based on Dan Catt's "The Most Statistically Correct Kaiser Chiefs Album" 
 # https://github.com/revdancatt/kaiserchiefstrackcounter

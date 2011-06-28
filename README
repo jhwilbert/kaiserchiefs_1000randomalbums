@@ -1,0 +1,14 @@
+README
+Kaiserchiefs Album
+
+The application has a cover scraper on its backend and a javascript/CSS grid system on its front end. The scraper iterates through the album pages of each album looking for the artwork image, it collects each one and stores in the GAE datastore as a JSON. The highlight command works the same way but will only fetch the selected cover and will set it to be a highlighted one in the JSON highlighted one.
+
+On the front end, it loads both JSON files that scraped the data. On the regular covers it shuffles the array and limits the loading to 1000 covers minus the ones that have been highlighted. The grid will also be populated by the highlighted images first - they will appear twice as big as the regular ones.
+
+To run the application, clone this repository into your GAE environment, scrape some data using: http://localhost:8080/scrape.
+
+To load the interface, change the localhost and port in javascript/settings.js to your host address and port and load the html on your browse. 
+
+The scraping mechanism was inspired by Dan Catt's "The Most Statistically Correct Kaiser Chiefs Album" - https://github.com/revdancatt/kaiserchiefstrackcounter. 
+
+This application was developed by João Wilbert in June/2011.
