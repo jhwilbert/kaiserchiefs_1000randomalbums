@@ -1,7 +1,8 @@
 syntax: glob
+
 .DS_Store
 *.pyc
 *.eot
 *.ttf
 *.woff
-fonts/*
+fonts/
